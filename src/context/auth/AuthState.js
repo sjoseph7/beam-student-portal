@@ -23,7 +23,7 @@ const AuthState = props => {
     }
 
     try {
-      const detailsEndpoint = "http://localhost:4000/api/v2/auth/details";
+      const detailsEndpoint = `${process.env.REACT_APP_PORTAL_API_BASE_URL}/auth/details`;
       const response = await axios.get(detailsEndpoint);
 
       dispatch({ type: USER_LOADED, payload: response.data.data });
@@ -35,7 +35,7 @@ const AuthState = props => {
   // Load User Profile
   const loadUserProfile = async () => {
     try {
-      const userProfileEndpoint = `http://localhost:4000/api/v2/people/${state.user._dbRef}`;
+      const userProfileEndpoint = `${process.env.REACT_APP_PORTAL_API_BASE_URL}/people/${state.user._dbRef}`;
       const response = await axios.get(userProfileEndpoint);
 
       dispatch({ type: PROFILE_LOADED, payload: response.data.data });
@@ -49,7 +49,7 @@ const AuthState = props => {
     const config = { headers: { "Content-Type": "application/json" } };
 
     try {
-      const loginEndpoint = `http://localhost:4000/api/v2/auth/login`;
+      const loginEndpoint = `${process.env.REACT_APP_PORTAL_API_BASE_URL}/auth/login`;
       const response = await axios.post(loginEndpoint, credentials, config);
       dispatch({ type: LOGIN_SUCCESS, payload: response.data });
       await loadUser();
@@ -61,7 +61,7 @@ const AuthState = props => {
   // Logout
   const logout = async () => {
     try {
-      const logoutEndpoint = `http://localhost:4000/api/v2/auth/logout`;
+      const logoutEndpoint = `${process.env.REACT_APP_PORTAL_API_BASE_URL}/auth/logout`;
       const response = await axios.post(logoutEndpoint);
       dispatch({ type: LOGOUT, payload: response.data });
     } catch (err) {}

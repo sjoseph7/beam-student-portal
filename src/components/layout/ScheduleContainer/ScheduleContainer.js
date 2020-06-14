@@ -4,6 +4,7 @@ import CycleSpinner from "../../spinners/CycleSpinner/CycleSpinner";
 import axios from "axios";
 import AuthContext from "../../../context/auth/authContext";
 import moment from "moment";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 
 const ScheduleContainer = () => {
   const { loadingProfile, profile } = useContext(AuthContext);
@@ -12,33 +13,28 @@ const ScheduleContainer = () => {
   useEffect(() => {
     const getFormattedScheduleItems = async () => {
       try {
-        // Get relevant schedule items
-        const relevantScheduleItems = await getRelevantScheduleItems(profile);
-        // Format schedule items
-        const formattedScheduleItems = formatScheduleItems(
-          relevantScheduleItems
-        );
-        setSchedule({ ...schedule, formattedScheduleItems });
+        const lineItems = await getRelevantScheduleItems(profile);
+        setSchedule({ ...schedule, lineItems });
       } catch (err) {
         console.error(err);
       }
     };
+
     if (!loadingProfile && profile) {
-      if (schedule.formattedScheduleItems.length === 0) {
+      if (schedule.lineItems.length === 0) {
         getFormattedScheduleItems();
       }
     }
     //eslint-disable-next-line
   }, [loadingProfile, profile]);
   return (
-    <Fragment>
-      <h3>Today's Schedule:</h3>
-      {schedule?.formattedScheduleItems?.length > 0 ? (
-        <Schedule lineItems={schedule.formattedScheduleItems} />
+    <div className="text-left">
+      {schedule?.lineItems?.length > 0 ? (
+        <Schedule lineItems={schedule.lineItems} />
       ) : (
         <CycleSpinner /> // TODO: Handle failure to load data
       )}
-    </Fragment>
+    </div>
   );
 };
 
@@ -47,7 +43,8 @@ export default ScheduleContainer;
 // ==== INITIAL STATE ==== //
 const initialScheduleState = {
   loading: true,
-  formattedScheduleItems: []
+  // formattedScheduleItems: []
+  lineItems: []
 };
 
 // ==== HELPERS ==== //
@@ -111,13 +108,14 @@ const formatScheduleItems = scheduleItems => {
 };
 
 const getRelevantScheduleItems = async person => {
-  const currentDay = "monday";
   // const currentDay = moment().format("dddd");
+  const currentDay = "monday";
+
   const hostResponse = await axios.get(
-    `http://localhost:4000/api/v2/schedule-items?hosts[in]=${person._id}&days[in]=${currentDay}`
+    `${process.env.REACT_APP_PORTAL_API_BASE_URL}/schedule-items?hosts[in]=${person._id}&days[in]=${currentDay}`
   );
   const participantResponse = await axios.get(
-    `http://localhost:4000/api/v2/schedule-items?participants[in]=${person._id}&days[in]=${currentDay}`
+    `${process.env.REACT_APP_PORTAL_API_BASE_URL}/schedule-items?participants[in]=${person._id}&days[in]=${currentDay}`
   );
 
   const todaysScheduleItems = [

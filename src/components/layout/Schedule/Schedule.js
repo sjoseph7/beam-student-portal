@@ -1,35 +1,32 @@
-import React from "react";
-import ScheduleLineItem from "../ScheduleLineItem/ScheduleLineItem";
+import React, { Fragment } from "react";
+import ScheduleLineItem from "../ScheduleLineItem2/ScheduleLineItem";
 
+import moment from "moment";
 // eslint-disable-next-line
-import styles from "./Schedule.module.css";
 
 const Schedule = ({ lineItems }) => {
   return (
-    <table>
-      <caption>
-        Updated two hours ago - <a href="#!">refresh</a>
-      </caption>
-      <thead>
-        <tr>
-          <th>Time</th>
-          <th>What's going on?</th>
-          <th>Staff</th>
-          <th>OpenLearning</th>
-          <th>Adobe Connect</th>
-        </tr>
-      </thead>
-      <tbody>
-        {lineItems?.length > 0 ? (
-          lineItems.map((lineItem, index) => (
-            <ScheduleLineItem key={index} content={lineItem} />
+    <Fragment>
+      <h5>
+        TODAY <strong>{moment().format("dddd, DD MMMM yyy")}</strong>
+      </h5>
+      {lineItems?.length > 0 ? (
+        lineItems
+          .sort(sortByStartTime)
+          .map((lineItem, index) => (
+            <ScheduleLineItem key={index} lineItem={lineItem} />
           ))
-        ) : (
-          <p>Nothing on your schedule.. for now.</p>
-        )}
-      </tbody>
-    </table>
+      ) : (
+        <p>Nothing on your schedule.. for now.</p>
+      )}
+    </Fragment>
   );
 };
 
 export default Schedule;
+
+const sortByStartTime = (a, b) => {
+  const aTime = `${a.startTime.hour}${a.startTime.minute}`;
+  const bTime = `${b.startTime.hour}${b.startTime.minute}`;
+  return bTime - aTime;
+};

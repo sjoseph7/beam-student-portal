@@ -26,14 +26,20 @@ const Login = props => {
   useEffect(() => {}, [isAuthenticated]);
 
   return (
-    <div>
-      <h1>
-        Account <span className="text-primary">Login</span>
-      </h1>
-      <form onSubmit={onSubmit}>
+    <div
+      className="container bg-white shadow p-5 mt-5 text-center"
+      style={{ width: "24rem" }}
+    >
+      <img
+        src="https://static1.squarespace.com/static/57b7400ebe65946ef828f100/t/5887da978419c20e9a7d9c06/1485298328460/BEAM_logo_onwhite.jpg?format=1500w"
+        width="100%"
+        alt="BEAM Logo"
+      />
+      <form className="text-left" onSubmit={onSubmit}>
         <div className="form-group">
           <label htmlFor="username">Username</label>
           <input
+            className="form-control"
             name="username"
             type="text"
             value={username}
@@ -43,8 +49,9 @@ const Login = props => {
         <div className="form-group">
           <label htmlFor="password">Password</label>
           <input
+            className="form-control"
             name="password"
-            type="text"
+            type="password"
             value={password}
             onChange={onChange}
           />

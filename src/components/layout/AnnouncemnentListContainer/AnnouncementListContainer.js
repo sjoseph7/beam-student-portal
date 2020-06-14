@@ -3,6 +3,7 @@ import AnnouncementList from "../AnnouncementList/AnnouncementList";
 import CycleSpinner from "../../spinners/CycleSpinner/CycleSpinner";
 import axios from "axios";
 import AuthContext from "../../../context/auth/authContext";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 
 const AnnouncementListContainer = () => {
   const { loadingProfile, profile } = useContext(AuthContext);
@@ -24,7 +25,9 @@ const AnnouncementListContainer = () => {
 
   return (
     <Fragment>
-      <h3>Announcements:</h3>
+      <h6>
+        <strong>ANNOUNCEMENTS:</strong>
+      </h6>
       {announcements.length === 0 ? (
         <CycleSpinner />
       ) : (
@@ -39,10 +42,10 @@ export default AnnouncementListContainer;
 const fetchAnnouncements = async person => {
   try {
     const regionResponse = await axios.get(
-      `http://localhost:4000/api/v2/announcements?regions[in]=${person.region}`
+      `${process.env.REACT_APP_PORTAL_API_BASE_URL}/announcements?regions[in]=${person.region}`
     );
     const recipientSpecificResponse = await axios.get(
-      `http://localhost:4000/api/v2/announcements?recipients[in]=${person._id}`
+      `${process.env.REACT_APP_PORTAL_API_BASE_URL}/announcements?recipients[in]=${person._id}`
     );
 
     const regionalAnnouncements = regionResponse.data?.data.filter(

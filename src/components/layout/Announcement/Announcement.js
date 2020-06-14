@@ -1,7 +1,11 @@
 import React from "react";
 
 const Announcement = ({ message }) => {
-  return <p>{message}</p>;
+  return (
+    <h1>
+      <strong>"{message}"</strong>
+    </h1>
+  );
 };
 
 export default Announcement;

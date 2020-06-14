@@ -8,6 +8,7 @@ import DashboardPage from "./components/pages/DashboardPage/DashboardPage";
 
 import { setAuthToken } from "./utils/auth";
 import LoadUser from "./components/auth/LoadUser";
+import Navbar from "./components/layout/Navbar/Navbar";
 
 if (localStorage.token) {
   setAuthToken(localStorage.token);
@@ -20,7 +21,9 @@ const App = () => {
       <AlertState>
         <Router>
           <Alert />
+          <Navbar />
           <Switch>
+            <Route exact path="/" component={Login} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/dashboard" component={DashboardPage} />
           </Switch>

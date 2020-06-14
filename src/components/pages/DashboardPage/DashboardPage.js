@@ -4,6 +4,8 @@ import ScheduleContainer from "../../layout/ScheduleContainer/ScheduleContainer"
 import { useContext } from "react";
 import AuthContext from "../../../context/auth/authContext";
 import { useEffect } from "react";
+import styles from "./DashboardPage.module.css";
+import moment from "moment";
 
 const DashboardPage = props => {
   const { logout, isAuthenticated } = useContext(AuthContext);
@@ -20,64 +22,87 @@ const DashboardPage = props => {
   }, [isAuthenticated]);
 
   return (
-    <div>
-      <button type="button" onClick={logUserOut}>
+    <div className="bg-light-gray text-center">
+      <div className="container mb-5">
+        {/* <button className="btn btn-block" type="button" onClick={logUserOut}>
         LOGOUT
-      </button>
-      {/* // <!-- TODO Componentize --> */}
-      <h1>Welcome to BEAM Los Angeles!</h1>
-      <h2>
-        <em>We're really excited that you're here</em>
-      </h2>
-      <AnnouncementListContainer />
-      <ScheduleContainer />
-      {/* // <!-- TODO: Componentize this --> */}
-      <p>Helpful links:</p>
-      <ul>
-        <li>
-          <a href="#!">Zulip, for chatting</a>
-        </li>
-        <li>
-          <a href="#!">OpenLearning</a>
-        </li>
-        <li>
-          <a href="#!">Brilliant</a>
-        </li>
-        <li>
-          <a href="#!">Art of Problem Solving</a>
-        </li>
-        <li>
-          <a href="#!">The 100 Problem Challenge</a>
-        </li>
-        <li>
-          <a href="#!">Challenge Problems</a>
-        </li>
-      </ul>
+      </button> */}
+        {/* // <!-- TODO Componentize --> */}
+        <h6 className="mt-5">Welcome to BEAM Los Angeles!</h6>
+        <h6>We're really excited that you're here</h6>
 
-      <p>Your schedule in detail:</p>
-      <em>TBD</em>
+        <div className="my-5">
+          <AnnouncementListContainer />
+        </div>
+
+        <ScheduleContainer />
+      </div>
+      {/* // <!-- TODO: Componentize this --> */}
+      <div className="bg-white py-5 text-left">
+        <div className="container">
+          <h5>
+            <strong>Helpful Links</strong>
+          </h5>
+          <ul>
+            <li>
+              <a href="#!">Zulip, for chatting</a>
+            </li>
+            <li>
+              <a href="#!">OpenLearning</a>
+            </li>
+            <li>
+              <a href="#!">Brilliant</a>
+            </li>
+            <li>
+              <a href="#!">Art of Problem Solving</a>
+            </li>
+            <li>
+              <a href="#!">The 100 Problem Challenge</a>
+            </li>
+            <li>
+              <a href="#!">Challenge Problems</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      {/* <p>Your schedule in detail:</p>
+      <em>TBD</em> */}
 
       {/* // <!-- TODO: Componentize this --> */}
-      <p>Need help?</p>
-      <ul>
-        <li>
-          <a href="#!">Tech support</a>
-        </li>
-        <li>
-          <a href="#!">Talk to our Guidance Counselor</a>
-        </li>
-        <li>
-          <a href="#!">
-            Talk to the Director of Student Life (for questions about
-            activities)
-          </a>
-        </li>
-        <li>
-          <a href="#!">
-            Talk to your Site Director (for anything about the program!)
-          </a>
-        </li>
-      </ul>
+      <footer className="bg-dark text-left pt-5 pb-3">
+        <div className="container">
+          <div className="row">
+            <div className="col text-white">
+              <h5>
+                <strong>NEED HELP?</strong>
+              </h5>
+              <h6>We have you covered.</h6>
+            </div>
+            <div className="col">
+              <ul>
+                <li>
+                  <a href="#!">Tech support</a>
+                </li>
+                <li>
+                  <a href="#!">Talk to our Guidance Counselor</a>
+                </li>
+                <li>
+                  <a href="#!">
+                    Talk to the Director of Student Life (for questions about
+                    activities)
+                  </a>
+                </li>
+                <li>
+                  <a href="#!">
+                    Talk to your Site Director (for anything about the program!)
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };
