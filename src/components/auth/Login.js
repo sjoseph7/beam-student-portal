@@ -70,6 +70,6 @@ export default Login;
 
 // ==== INITIAL STATES ==== //
 const initialUserState = {
-  username: "admin",
-  password: "asdfasdf"
+  username: "",
+  password: ""
 };
