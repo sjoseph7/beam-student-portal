@@ -31,7 +31,7 @@ const Login = props => {
       style={{ width: "24rem" }}
     >
       <img
-        src="https://static1.squarespace.com/static/57b7400ebe65946ef828f100/t/5887da978419c20e9a7d9c06/1485298328460/BEAM_logo_onwhite.jpg?format=1500w"
+        src="https://www.educational-access.org/wp-content/uploads/2016/02/Logo-CS5-GothamBold.png"
         width="100%"
         alt="BEAM Logo"
       />
