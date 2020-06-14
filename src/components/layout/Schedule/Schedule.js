@@ -26,7 +26,7 @@ const Schedule = ({ lineItems }) => {
 export default Schedule;
 
 const sortByStartTime = (a, b) => {
-  const aTime = `${a.startTime.hour}${a.startTime.minute}`;
-  const bTime = `${b.startTime.hour}${b.startTime.minute}`;
-  return bTime - aTime;
+  const aTime = a.startTime.hour * 100 + a.startTime.minute;
+  const bTime = b.startTime.hour * 100 + b.startTime.minute;
+  return aTime - bTime;
 };
