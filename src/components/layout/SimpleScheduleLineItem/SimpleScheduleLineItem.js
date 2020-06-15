@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import moment from "moment";
 
 // ! NEW Schedule Item - "SimpleScheduleItem"
-const ScheduleLineItem = ({
+const SimpleScheduleLineItem = ({
   lineItem: { name, startTime, endTime, hosts, links }
 }) => {
   const [openLearningLinks, adobeConnectLinks] = sortLinksIntoGroups(links, [
@@ -133,7 +133,7 @@ const sortLinksIntoGroups = (links, groupNames) => {
   }
  */
 
-export default ScheduleLineItem;
+export default SimpleScheduleLineItem;
 
 const isActiveItem = (startTime, endTime) => {
   const currentTime = moment({ hour: 9, minute: 40 }).format("hhmm");

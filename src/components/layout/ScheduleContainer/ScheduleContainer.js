@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import Schedule from "../Schedule/Schedule";
+import SimpleSchedule from "../SimpleSchedule/SimpleSchedule";
 import axios from "axios";
 import AuthContext from "../../../context/auth/authContext";
 
@@ -27,7 +27,7 @@ const ScheduleContainer = () => {
   return (
     <div className="text-left">
       {schedule?.lineItems?.length > 0 ? (
-        <Schedule lineItems={schedule.lineItems} />
+        <SimpleSchedule lineItems={schedule.lineItems} />
       ) : (
         <div className="div text-center">
           <div className="spinner-border text-center" role="status">

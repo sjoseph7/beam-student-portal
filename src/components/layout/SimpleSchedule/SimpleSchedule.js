@@ -1,10 +1,10 @@
 import React, { Fragment } from "react";
-import ScheduleLineItem from "../ScheduleLineItem/ScheduleLineItem";
+import SimpleScheduleLineItem from "../SimpleScheduleLineItem/SimpleScheduleLineItem";
 
 import moment from "moment";
 // eslint-disable-next-line
 
-const Schedule = ({ lineItems }) => {
+const SimpleSchedule = ({ lineItems }) => {
   return (
     <Fragment>
       <h5>
@@ -14,7 +14,7 @@ const Schedule = ({ lineItems }) => {
         lineItems
           .sort(sortByStartTime)
           .map((lineItem, index) => (
-            <ScheduleLineItem key={index} lineItem={lineItem} />
+            <SimpleScheduleLineItem key={index} lineItem={lineItem} />
           ))
       ) : (
         <p>Nothing on your schedule.. for now.</p>
@@ -23,7 +23,7 @@ const Schedule = ({ lineItems }) => {
   );
 };
 
-export default Schedule;
+export default SimpleSchedule;
 
 const sortByStartTime = (a, b) => {
   const aTime = a.startTime.hour * 100 + a.startTime.minute;
