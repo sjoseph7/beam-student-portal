@@ -44,7 +44,7 @@ const DashboardPage = props => {
           <h5>
             <strong>Helpful Links</strong>
           </h5>
-          <ul>
+          <ul className="list-unstyled">
             <li>
               <a href="#!">Zulip, for chatting</a>
             </li>
@@ -74,14 +74,14 @@ const DashboardPage = props => {
       <footer className="bg-dark text-left pt-5 pb-3">
         <div className="container">
           <div className="row">
-            <div className="col text-white">
+            <div className="col col-sm-5 col-md-4 col-lg-3 col-xl-2 text-white">
               <h5>
                 <strong>NEED HELP?</strong>
               </h5>
               <h6>We have you covered.</h6>
             </div>
             <div className="col">
-              <ul>
+              <ul className="list-unstyled">
                 <li>
                   <a href="#!">Tech support</a>
                 </li>
