@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import AuthContext from "../../../context/auth/authContext";
 
 const Navbar = () => {
-  const { logout } = useContext(AuthContext);
+  const { logout, isAuthenticated } = useContext(AuthContext);
 
   const logUserOut = () => {
     logout();
@@ -11,8 +11,17 @@ const Navbar = () => {
   return (
     <nav className="navbar navbar-light bg-light">
       <a className="navbar-brand" href="#logout" onClick={logUserOut}>
-        <i className="fas fa-bars"></i>
+        <i class="fas fa-bars"></i>
       </a>
+      {isAuthenticated && (
+        <a
+          className="text-reset ml-auto mr-0 pr-0"
+          href="#logout"
+          onClick={logUserOut}
+        >
+          <i class="fas fa-sign-out-alt"></i>
+        </a>
+      )}
     </nav>
   );
 };
