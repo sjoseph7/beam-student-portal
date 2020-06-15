@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import AuthState from "./context/auth/AuthState";
 import AlertState from "./context/alert/AlertState";
 import Login from "./components/auth/Login";
-import Alert from "./components/layout/Alert";
+import Alert from "./components/layout/Alert/Alert";
 import DashboardPage from "./components/pages/DashboardPage/DashboardPage";
 
 import { setAuthToken } from "./utils/auth";
