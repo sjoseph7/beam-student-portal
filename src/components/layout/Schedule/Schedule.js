@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import ScheduleLineItem from "../ScheduleLineItem2/ScheduleLineItem";
+import ScheduleLineItem from "../ScheduleLineItem/ScheduleLineItem";
 
 import moment from "moment";
 // eslint-disable-next-line

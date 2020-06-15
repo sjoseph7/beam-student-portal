@@ -9,9 +9,9 @@ const Navbar = () => {
   };
 
   return (
-    <nav class="navbar navbar-light bg-light">
-      <a class="navbar-brand" href="#logout" onClick={logUserOut}>
-        <i class="fas fa-bars"></i>
+    <nav className="navbar navbar-light bg-light">
+      <a className="navbar-brand" href="#logout" onClick={logUserOut}>
+        <i className="fas fa-bars"></i>
       </a>
     </nav>
   );
