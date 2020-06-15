@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React, { useReducer, useContext } from "react";
 import AuthContext from "./authContext";
 import authReducer from "./authReducer";
 import axios from "axios";
@@ -12,23 +12,34 @@ import {
   LOGOUT
 } from "../types";
 import { setAuthToken } from "../../utils/auth";
+import AlertContext from "../alert/alertContext";
 
 const AuthState = props => {
   const [state, dispatch] = useReducer(authReducer, initialState);
+  const { setAlert } = useContext(AlertContext);
 
   // Load User
   const loadUser = async () => {
     if (localStorage.token) {
       setAuthToken(localStorage.token);
+    } else {
+      return;
     }
 
     try {
       const detailsEndpoint = `${process.env.REACT_APP_PORTAL_API_BASE_URL}/auth/details`;
-      const response = await axios.get(detailsEndpoint);
+      const response = await axios
+        .get(detailsEndpoint)
+        .catch(() => setAlert("Unable to load user", "warning"));
 
-      dispatch({ type: USER_LOADED, payload: response.data.data });
+      if (!response.data?.data) {
+        throw Error();
+      }
+
+      dispatch({ type: USER_LOADED, payload: response.data?.data });
     } catch (err) {
       dispatch({ type: AUTH_ERROR });
+      setAlert("Still unable to load user", "warning");
     }
   };
 
@@ -50,12 +61,31 @@ const AuthState = props => {
 
     try {
       const loginEndpoint = `${process.env.REACT_APP_PORTAL_API_BASE_URL}/auth/login`;
-      const response = await axios.post(loginEndpoint, credentials, config);
-      dispatch({ type: LOGIN_SUCCESS, payload: response.data });
-      await loadUser();
+      await axios
+        .post(loginEndpoint, credentials, config)
+        .catch(err => {
+          // timeout
+          if (!err.response) {
+            setAlert(
+              "(#) Unable to reach server. Please try again later.",
+              "danger"
+            );
+          }
+        })
+
+        .then(async res => {
+          if (res.data.success) {
+            dispatch({ type: LOGIN_SUCCESS, payload: res.data });
+          } else {
+            dispatch({ type: LOGIN_FAIL, payload: "Error" });
+            throw Error();
+          }
+        })
+        .then(async () => await loadUser())
+        .catch(() => setAlert("(#) Unable to load profile", "danger"));
     } catch (err) {
-      console.debug(err.response.data);
-      dispatch({ type: LOGIN_FAIL, payload: "Error" });
+      console.debug(err);
+      setAlert("(#) Could not connect to server", "danger");
     }
   };
   // Logout

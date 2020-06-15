@@ -5,14 +5,16 @@ import { useContext } from "react";
 import AuthContext from "../../../context/auth/authContext";
 import { useEffect } from "react";
 import styles from "./DashboardPage.module.css";
-import moment from "moment";
 
 const DashboardPage = props => {
-  const { logout, isAuthenticated } = useContext(AuthContext);
+  const { isAuthenticated, user, loadUserProfile } = useContext(AuthContext);
 
-  const logUserOut = () => {
-    logout();
-  };
+  useEffect(() => {
+    if (user) {
+      loadUserProfile();
+    }
+    // eslint-disable-next-line
+  }, [user]);
 
   useEffect(() => {
     if (!isAuthenticated) {

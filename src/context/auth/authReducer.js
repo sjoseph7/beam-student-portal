@@ -28,9 +28,9 @@ export default (state, action) => {
         token: null,
         isAuthenticated: false,
         loading: false,
-        user: false,
+        user: null,
         loadingProfile: false,
-        profile: false,
+        profile: null,
         error: action.payload
       };
     }

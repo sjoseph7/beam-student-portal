@@ -16,20 +16,20 @@ if (localStorage.token) {
 
 const App = () => {
   return (
-    <AuthState>
-      <LoadUser />
-      <AlertState>
+    <AlertState>
+      <AuthState>
+        <LoadUser />
         <Router>
-          <Alert />
           <Navbar />
+          <Alert />
           <Switch>
             <Route exact path="/" component={Login} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/dashboard" component={DashboardPage} />
           </Switch>
         </Router>
-      </AlertState>
-    </AuthState>
+      </AuthState>
+    </AlertState>
   );
 };
 
