@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import AuthContext from "../../../context/auth/authContext";
 
 const Navbar = () => {
-  const { logout, isAuthenticated } = useContext(AuthContext);
+  const { logout } = useContext(AuthContext);
 
   const logUserOut = () => {
     logout();

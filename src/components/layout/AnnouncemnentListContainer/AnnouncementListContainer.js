@@ -1,9 +1,7 @@
 import React, { useEffect, useState, Fragment, useContext } from "react";
 import AnnouncementList from "../AnnouncementList/AnnouncementList";
-import CycleSpinner from "../../spinners/CycleSpinner/CycleSpinner";
 import axios from "axios";
 import AuthContext from "../../../context/auth/authContext";
-import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 
 const AnnouncementListContainer = () => {
   const { loadingProfile, profile } = useContext(AuthContext);

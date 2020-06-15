@@ -1,10 +1,7 @@
-import React, { useEffect, useState, Fragment, useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Schedule from "../Schedule/Schedule";
-import CycleSpinner from "../../spinners/CycleSpinner/CycleSpinner";
 import axios from "axios";
 import AuthContext from "../../../context/auth/authContext";
-import moment from "moment";
-import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 
 const ScheduleContainer = () => {
   const { loadingProfile, profile } = useContext(AuthContext);
@@ -53,65 +50,6 @@ const initialScheduleState = {
 };
 
 // ==== HELPERS ==== //
-const formatScheduleItems = scheduleItems => {
-  /**
-   *  createdAt: "2020-06-11T07:42:12.488Z"
-      days: (2) ["monday", "thursday"]
-      endTime: {hour: 10, minute: 30}
-      hosts: (2) ["2dc4fc8194f68a3cbc7c69a3", "2dc4fc8194f68a3cbc7c69a4"]
-      links: [{…}]
-      name: "Truth, Lies, and Logic (morning class)"
-      participants: (2) ["2dc4fc8194f68a3cbc7c69a1", "2dc4fc8194f68a3cbc7c69a2"]
-      region: "6dc4fc8194f68a3cbc7c69a2"
-      startTime: {hour: 9, minute: 35}
-      updatedAt: "2020-06-11T07:42:12.488Z"
-      __v: 0
-      _id: "4dc4fc8194f68a3cbc7c69a2"
-
-  /**
-   * [
-      "9:35am - 10:30am",
-      "Truth, Lies, and Logic (morning class)",
-      "Halimeda and Darien",
-      null,
-      <a href="#!">Join!</a>
-    ]
-    */
-
-  const formattedScheduleItems = scheduleItems.map((scheduleItem, index) => {
-    const { startTime, endTime, name, hosts, links } = scheduleItem;
-
-    const formattedTime = `${moment(startTime).format("h:mma")}-${moment(
-      endTime
-    ).format("h:mma")}`;
-    const hostNames = hosts.map(host => host.firstName).join(", ");
-    const openLearningLinks = links
-      .filter(link => link.type === "open-learning")
-      .map((link, index) => (
-        <a key={`ol-${index}`} href={link.url}>
-          {link.text || "Join!"}
-        </a>
-      ));
-    const adobeConnectLinks = links
-      .filter(link => link.type === "adobe-connect")
-      .map((link, index) => (
-        <a key={`ac-${index}`} href={link.url}>
-          {link.text || "Join!"}
-        </a>
-      ));
-
-    return [
-      formattedTime,
-      name,
-      hostNames,
-      openLearningLinks,
-      adobeConnectLinks
-    ];
-  });
-
-  return formattedScheduleItems;
-};
-
 const getRelevantScheduleItems = async person => {
   // const currentDay = moment().format("dddd");
   const currentDay = "monday";

@@ -4,7 +4,6 @@ import ScheduleContainer from "../../layout/ScheduleContainer/ScheduleContainer"
 import { useContext } from "react";
 import AuthContext from "../../../context/auth/authContext";
 import { useEffect } from "react";
-import styles from "./DashboardPage.module.css";
 
 const DashboardPage = props => {
   const { isAuthenticated, user, loadUserProfile } = useContext(AuthContext);
@@ -24,7 +23,7 @@ const DashboardPage = props => {
   }, [isAuthenticated]);
 
   return (
-    <div className="bg-light-gray text-center">
+    <div className="text-center">
       <div className="container mb-5">
         {/* <button className="btn btn-block" type="button" onClick={logUserOut}>
         LOGOUT
