@@ -7,7 +7,7 @@ const Login = props => {
   const [state, setState] = useState(initialUserState);
   const { login, isAuthenticated } = useContext(AuthContext);
 
-  const { username, password } = state;
+  const { username, password, button } = state;
 
   const onChange = e => setState({ ...state, [e.target.name]: e.target.value });
   const onSubmit = e => {
@@ -28,9 +28,10 @@ const Login = props => {
   return (
     <div
       className="container bg-white shadow p-5 mt-5 text-center"
-      style={{ width: "24rem" }}
+      style={{ width: "20rem" }}
     >
       <img
+        className="mb-4"
         src="https://www.educational-access.org/wp-content/uploads/2016/02/Logo-CS5-GothamBold.png"
         width="100%"
         alt="BEAM Logo"
@@ -56,11 +57,30 @@ const Login = props => {
             onChange={onChange}
           />
         </div>
-        <input
-          type="submit"
-          value="Login"
-          className="btn btn-primary btn-block"
-        />
+        {button ? (
+          <button
+            type="submit"
+            className="btn btn-primary btn-block"
+            onClick={() => {
+              setState({ ...state, button: false });
+              console.info("Logging in...");
+              login({ username, password });
+            }}
+            onSubmit={onSubmit}
+          >
+            Login
+          </button>
+        ) : (
+          <button
+            type="submit"
+            className="btn btn-primary btn-block disabled"
+            disabled
+          >
+            <div className="spinner-border m-0" role="status">
+              <span className="sr-only">Loading...</span>
+            </div>
+          </button>
+        )}
       </form>
     </div>
   );
@@ -71,5 +91,6 @@ export default Login;
 // ==== INITIAL STATES ==== //
 const initialUserState = {
   username: "",
-  password: ""
+  password: "",
+  button: true
 };
