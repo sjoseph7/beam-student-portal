@@ -16,7 +16,7 @@ const Navbar = () => {
       {isAuthenticated && (
         <a
           className="text-reset ml-auto mr-0 pr-0"
-          href="#logout"
+          href="#yummy-hamburger"
           onClick={logUserOut}
         >
           <i class="fas fa-sign-out-alt"></i>
