@@ -10,13 +10,13 @@ const Navbar = () => {
 
   return (
     <nav className="navbar navbar-light bg-light">
-      <a className="navbar-brand" href="#logout" onClick={logUserOut}>
+      <a className="navbar-brand" href="#yummy-hamburger">
         <i class="fas fa-bars"></i>
       </a>
       {isAuthenticated && (
         <a
           className="text-reset ml-auto mr-0 pr-0"
-          href="#yummy-hamburger"
+          href="#logout"
           onClick={logUserOut}
         >
           <i class="fas fa-sign-out-alt"></i>
