@@ -32,7 +32,12 @@ const ScheduleContainer = () => {
       {schedule?.lineItems?.length > 0 ? (
         <Schedule lineItems={schedule.lineItems} />
       ) : (
-        <CycleSpinner /> // TODO: Handle failure to load data
+        <div className="div text-center">
+          <div className="spinner-border text-center" role="status">
+            <span className="sr-only">Loading...</span>
+          </div>
+        </div>
+        // TODO: Handle failure to load data
       )}
     </div>
   );

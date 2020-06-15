@@ -29,7 +29,11 @@ const AnnouncementListContainer = () => {
         <strong>ANNOUNCEMENTS:</strong>
       </h6>
       {announcements.length === 0 ? (
-        <CycleSpinner />
+        <div className="div text-center">
+          <div className="spinner-border text-center" role="status">
+            <span className="sr-only">Loading...</span>
+          </div>
+        </div>
       ) : (
         <AnnouncementList announcements={announcements} />
       )}
