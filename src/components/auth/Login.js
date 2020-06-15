@@ -7,7 +7,7 @@ const Login = props => {
   const [state, setState] = useState(initialUserState);
   const { login, isAuthenticated } = useContext(AuthContext);
 
-  const { username, password, button } = state;
+  const { username, password, submitButtonLoading } = state;
 
   const onChange = e => setState({ ...state, [e.target.name]: e.target.value });
   const onSubmit = e => {
@@ -22,8 +22,6 @@ const Login = props => {
     }
     //eslint-disable-next-line
   }, [isAuthenticated]);
-
-  useEffect(() => {}, [isAuthenticated]);
 
   return (
     <div
@@ -57,16 +55,21 @@ const Login = props => {
             onChange={onChange}
           />
         </div>
-        {button ? (
+        {!submitButtonLoading ? (
           <button
             type="submit"
             className="btn btn-primary btn-block"
             onClick={() => {
-              setState({ ...state, button: false });
+              setState({ ...state, submitButtonLoading: true });
               console.info("Logging in...");
-              login({ username, password });
+              login(
+                { username, password },
+                {
+                  failCallback: () =>
+                    setState({ ...state, submitButtonLoading: false })
+                }
+              );
             }}
-            onSubmit={onSubmit}
           >
             Login
           </button>
@@ -92,5 +95,5 @@ export default Login;
 const initialUserState = {
   username: "",
   password: "",
-  button: true
+  submitButtonLoading: false
 };

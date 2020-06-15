@@ -56,15 +56,17 @@ const AuthState = props => {
   };
 
   // Login User
-  const login = async credentials => {
+  const login = async (credentials, { failCallback }) => {
     const config = { headers: { "Content-Type": "application/json" } };
 
+    // TODO: Clean up this mess of code (please)
     try {
       const loginEndpoint = `${process.env.REACT_APP_PORTAL_API_BASE_URL}/auth/login`;
       await axios
         .post(loginEndpoint, credentials, config)
         .catch(err => {
           // timeout
+          failCallback && failCallback();
           if (!err.response) {
             setAlert(
               "(#) Unable to reach server. Please try again later.",
