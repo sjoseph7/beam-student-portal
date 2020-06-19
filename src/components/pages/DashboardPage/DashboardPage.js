@@ -1,15 +1,16 @@
 import React, { Fragment, useEffect, useState } from "react";
 import AnnouncementListContainer from "../../layout/AnnouncemnentListContainer/AnnouncementListContainer";
 import ScheduleContainer from "../../layout/ScheduleContainer/ScheduleContainer";
-import { useAuth0 } from "../../../react-auth0-spa";
 import Navbar from "../../layout/Navbar/Navbar";
 import ProfileContext from "../../../context/profile/profileContext";
 import { useContext } from "react";
 import axios from "axios";
 import { getGlobalConfig } from "../../../utils/config";
+import { useAuth0 } from "../../../utils/auth0/provider";
+
 
 const DashboardPage = props => {
-  const { loading, user, getTokenSilently } = useAuth0();
+  const { loading, user, token } = useAuth0();
   const { loadingProfile, profile, loadUserProfile } = useContext(
     ProfileContext
   );
@@ -19,7 +20,6 @@ const DashboardPage = props => {
   useEffect(() => {
     const getRegionData = async () => {
       try {
-        const token = await getTokenSilently();
         const opts = { headers: { Authorization: `Bearer ${token}` } };
         const { apiBaseUrl } = getGlobalConfig()
         const regionData = await axios.get(

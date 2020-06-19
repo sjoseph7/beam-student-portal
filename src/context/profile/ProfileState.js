@@ -3,21 +3,20 @@ import ProfileContext from "./profileContext";
 import profileReducer from "./profileReducer";
 import axios from "axios";
 import { PROFILE_LOADED, NO_PROFILE } from "../types";
-import { useAuth0 } from "../../react-auth0-spa";
 import { getGlobalConfig } from "../../utils/config";
+import { useAuth0 } from '../../utils/auth0/provider'
 
 const ProfileState = props => {
   const [state, dispatch] = useReducer(profileReducer, initialState);
-  const { user, getTokenSilently } = useAuth0();
+  const { user, token } = useAuth0();
 
   // Load User Profile
   const loadUserProfile = async () => {
     try {
       const { apiBaseUrl } = getGlobalConfig()
-      const userId = user.sub.split("|")[1];
+      const { userId } = user;
       const userProfileEndpoint = `${apiBaseUrl}/people/${userId}`;
 
-      const token = await getTokenSilently();
       const response = await axios.get(userProfileEndpoint, {
         headers: {
           Authorization: `Bearer ${token}`

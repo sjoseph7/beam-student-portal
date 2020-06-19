@@ -2,18 +2,18 @@ import React, { useEffect, useState, Fragment, useContext } from "react";
 import AnnouncementList from "../AnnouncementList/AnnouncementList";
 import axios from "axios";
 import ProfileContext from "../../../context/profile/profileContext";
-import { useAuth0 } from "../../../react-auth0-spa";
 import { getGlobalConfig } from "../../../utils/config";
+import { useAuth0 } from "../../../utils/auth0/provider";
+
 
 const AnnouncementListContainer = () => {
-  const { getTokenSilently } = useAuth0();
+  const { token } = useAuth0();
   const { loadingProfile, profile } = useContext(ProfileContext);
 
   const [announcements, setAnnouncements] = useState(null);
 
   useEffect(() => {
     const getAnnouncements = async () => {
-      const token = await getTokenSilently();
       const announcements = await fetchAnnouncements(profile, token);
       setAnnouncements(announcements);
     };

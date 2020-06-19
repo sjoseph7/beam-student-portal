@@ -2,20 +2,18 @@ import React, { useEffect, useState, useContext } from "react";
 import SimpleSchedule from "../SimpleSchedule/SimpleSchedule";
 import axios from "axios";
 import ProfileContext from "../../../context/profile/profileContext";
-import { useAuth0 } from "../../../react-auth0-spa";
 import moment from "moment";
-
 import { getGlobalConfig } from "../../../utils/config";
+import { useAuth0 } from '../../../utils/auth0/provider'
 
 const ScheduleContainer = () => {
-  const { getTokenSilently } = useAuth0();
+  const { token } = useAuth0();
   const { loadingProfile, profile } = useContext(ProfileContext);
   const [schedule, setSchedule] = useState(initialScheduleState);
 
   useEffect(() => {
     const getFormattedScheduleItems = async () => {
       try {
-        const token = await getTokenSilently();
         const lineItems = await getRelevantScheduleItems(profile, token);
         setSchedule({ ...schedule, lineItems, loading: false });
       } catch (err) {
