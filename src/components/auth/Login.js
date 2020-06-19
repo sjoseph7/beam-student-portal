@@ -30,7 +30,7 @@ const Login = props => {
     >
       <img
         className="mb-4"
-        src="https://www.educational-access.org/wp-content/uploads/2016/02/Logo-CS5-GothamBold.png"
+        src={`${process.env.PUBLIC_URL}/img/beam.png`}
         width="100%"
         alt="BEAM Logo"
       />
