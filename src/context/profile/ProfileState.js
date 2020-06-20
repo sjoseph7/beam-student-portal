@@ -2,7 +2,7 @@ import React, { useReducer } from "react";
 import ProfileContext from "./profileContext";
 import profileReducer from "./profileReducer";
 import axios from "axios";
-import { PROFILE_LOADED, NO_PROFILE, LOGOUT } from "../types";
+import { PROFILE_LOADED, NO_PROFILE } from "../types";
 import { useAuth0 } from "../../react-auth0-spa";
 
 const ProfileState = props => {
