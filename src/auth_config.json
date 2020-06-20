@@ -1,0 +1,5 @@
+{
+  "domain": "beammath.us.auth0.com",
+  "clientId": "q6HSnNAXqcve54js2436u95SV2lmxY7p",
+  "audience": "https://beam-portal-api.herokuapp.com/api/v2/"
+}

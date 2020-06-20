@@ -2,31 +2,36 @@ import React, { useEffect, useState, useContext } from "react";
 import SimpleSchedule from "../SimpleSchedule/SimpleSchedule";
 import axios from "axios";
 import AuthContext from "../../../context/auth/authContext";
+import { useAuth0 } from "../../../react-auth0-spa";
+import moment from "moment";
 
 const ScheduleContainer = () => {
+  const { getTokenSilently } = useAuth0();
   const { loadingProfile, profile } = useContext(AuthContext);
   const [schedule, setSchedule] = useState(initialScheduleState);
 
   useEffect(() => {
     const getFormattedScheduleItems = async () => {
       try {
-        const lineItems = await getRelevantScheduleItems(profile);
-        setSchedule({ ...schedule, lineItems });
+        const token = await getTokenSilently();
+        const lineItems = await getRelevantScheduleItems(profile, token);
+        setSchedule({ ...schedule, lineItems, loading: false });
       } catch (err) {
         console.error(err);
       }
     };
 
     if (!loadingProfile && profile) {
-      if (schedule.lineItems.length === 0) {
+      if (schedule.lineItems === null) {
         getFormattedScheduleItems();
       }
     }
     //eslint-disable-next-line
   }, [loadingProfile, profile]);
+
   return (
     <div className="text-left">
-      {schedule?.lineItems?.length > 0 ? (
+      {schedule?.lineItems !== null ? (
         <SimpleSchedule lineItems={schedule.lineItems} />
       ) : (
         <div className="div text-center">
@@ -34,7 +39,6 @@ const ScheduleContainer = () => {
             <span className="sr-only">Loading...</span>
           </div>
         </div>
-        // TODO: Handle failure to load data
       )}
     </div>
   );
@@ -45,26 +49,39 @@ export default ScheduleContainer;
 // ==== INITIAL STATE ==== //
 const initialScheduleState = {
   loading: true,
-  // formattedScheduleItems: []
-  lineItems: []
+  lineItems: null
 };
 
 // ==== HELPERS ==== //
-const getRelevantScheduleItems = async person => {
-  // const currentDay = moment().format("dddd");
-  const currentDay = "monday";
+const getRelevantScheduleItems = async (person, token) => {
+  // const currentDay = "monday"; //* Hard code day
+  const currentDay = moment().format("dddd").toLowerCase();
+  const opts = { headers: { Authorization: `Bearer ${token}` } };
 
+  const regionalResponse = await axios.get(
+    `${process.env.REACT_APP_PORTAL_API_BASE_URL}/schedule-items?region[in]=${person.regions}&days[in]=${currentDay}`,
+    opts
+  );
   const hostResponse = await axios.get(
-    `${process.env.REACT_APP_PORTAL_API_BASE_URL}/schedule-items?hosts[in]=${person._id}&days[in]=${currentDay}`
+    `${process.env.REACT_APP_PORTAL_API_BASE_URL}/schedule-items?hosts[in]=${person._id}&days[in]=${currentDay}`,
+    opts
   );
   const participantResponse = await axios.get(
-    `${process.env.REACT_APP_PORTAL_API_BASE_URL}/schedule-items?participants[in]=${person._id}&days[in]=${currentDay}`
+    `${process.env.REACT_APP_PORTAL_API_BASE_URL}/schedule-items?participants[in]=${person._id}&days[in]=${currentDay}`,
+    opts
   );
 
+  const regionalScheduleItems = (regionalResponse.data?.data || [])
+    .filter(scheduleItem => scheduleItem.participants?.length === 0)
+    .filter(
+      scheduleItem =>
+        scheduleItem.hosts?.filter(host => host._id === person._id).length === 0
+    );
+
   const todaysScheduleItems = [
+    ...regionalScheduleItems,
     ...hostResponse.data.data,
     ...participantResponse.data.data
   ];
-
   return todaysScheduleItems;
 };

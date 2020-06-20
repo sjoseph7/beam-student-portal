@@ -1,7 +1,6 @@
 import React, { Fragment } from "react";
 import moment from "moment";
 
-// ! NEW Schedule Item - "SimpleScheduleItem"
 const SimpleScheduleLineItem = ({
   lineItem: { name, startTime, endTime, hosts, links }
 }) => {
@@ -84,8 +83,9 @@ const SimpleScheduleLineItem = ({
                   <div className="dropdown-menu">
                     {openLearningLinks
                       .sort(sortLinksByText)
-                      .map(adobeConnectLink => (
+                      .map((adobeConnectLink, index) => (
                         <a
+                          key={`ac-${index}`}
                           className="dropdown-item"
                           href={adobeConnectLink.url}
                         >
@@ -136,10 +136,10 @@ const sortLinksIntoGroups = (links, groupNames) => {
 export default SimpleScheduleLineItem;
 
 const isActiveItem = (startTime, endTime) => {
-  const currentTime = moment({ hour: 9, minute: 40 }).format("hhmm");
-  startTime = moment(startTime).format("hhmm");
-  endTime = moment(endTime).format("hhmm");
-
+  // const currentTime = moment({ hour: 1, minute: 40 }).format("HHmm"); //* Hard code time
+  const currentTime = moment().format("HHmm");
+  startTime = moment(startTime).format("HHmm");
+  endTime = moment(endTime).format("HHmm");
   return currentTime >= startTime && currentTime <= endTime;
 };
 

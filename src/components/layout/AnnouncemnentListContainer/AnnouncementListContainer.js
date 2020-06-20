@@ -2,19 +2,22 @@ import React, { useEffect, useState, Fragment, useContext } from "react";
 import AnnouncementList from "../AnnouncementList/AnnouncementList";
 import axios from "axios";
 import AuthContext from "../../../context/auth/authContext";
+import { useAuth0 } from "../../../react-auth0-spa";
 
 const AnnouncementListContainer = () => {
+  const { getTokenSilently } = useAuth0();
   const { loadingProfile, profile } = useContext(AuthContext);
 
-  const [announcements, setAnnouncements] = useState([]);
+  const [announcements, setAnnouncements] = useState(null);
 
   useEffect(() => {
     const getAnnouncements = async () => {
-      const announcements = await fetchAnnouncements(profile);
+      const token = await getTokenSilently();
+      const announcements = await fetchAnnouncements(profile, token);
       setAnnouncements(announcements);
     };
     if (!loadingProfile && profile) {
-      if (announcements.length === 0) {
+      if (announcements === null) {
         getAnnouncements();
       }
     }
@@ -26,7 +29,8 @@ const AnnouncementListContainer = () => {
       <h6>
         <strong>ANNOUNCEMENTS:</strong>
       </h6>
-      {announcements.length === 0 ? (
+
+      {announcements === null ? (
         <div className="div text-center">
           <div className="spinner-border text-center" role="status">
             <span className="sr-only">Loading...</span>
@@ -41,13 +45,20 @@ const AnnouncementListContainer = () => {
 
 export default AnnouncementListContainer;
 
-const fetchAnnouncements = async person => {
+const fetchAnnouncements = async (person, token) => {
   try {
+    const opts = {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    };
     const regionResponse = await axios.get(
-      `${process.env.REACT_APP_PORTAL_API_BASE_URL}/announcements?regions[in]=${person.region}`
+      `${process.env.REACT_APP_PORTAL_API_BASE_URL}/announcements?regions[in]=${person.regions}`,
+      opts
     );
     const recipientSpecificResponse = await axios.get(
-      `${process.env.REACT_APP_PORTAL_API_BASE_URL}/announcements?recipients[in]=${person._id}`
+      `${process.env.REACT_APP_PORTAL_API_BASE_URL}/announcements?recipients[in]=${person._id}`,
+      opts
     );
 
     const regionalAnnouncements = regionResponse.data?.data.filter(
