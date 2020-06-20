@@ -5,6 +5,8 @@ import ProfileContext from "../../../context/profile/profileContext";
 import { useAuth0 } from "../../../react-auth0-spa";
 import moment from "moment";
 
+import config from "../../../config.json";
+
 const ScheduleContainer = () => {
   const { getTokenSilently } = useAuth0();
   const { loadingProfile, profile } = useContext(ProfileContext);
@@ -31,14 +33,14 @@ const ScheduleContainer = () => {
 
   return (
     <div className="text-left">
-      {schedule?.lineItems !== null ? (
-        <SimpleSchedule lineItems={schedule.lineItems} />
-      ) : (
+      {schedule?.lineItems === null ? (
         <div className="div text-center">
           <div className="spinner-border text-center" role="status">
             <span className="sr-only">Loading...</span>
           </div>
         </div>
+      ) : (
+        <SimpleSchedule lineItems={schedule.lineItems} />
       )}
     </div>
   );
@@ -54,34 +56,43 @@ const initialScheduleState = {
 
 // ==== HELPERS ==== //
 const getRelevantScheduleItems = async (person, token) => {
-  // const currentDay = "monday"; //* Hard code day
-  const currentDay = moment().format("dddd").toLowerCase();
-  const opts = { headers: { Authorization: `Bearer ${token}` } };
-
-  const regionalResponse = await axios.get(
-    `${process.env.REACT_APP_PORTAL_API_BASE_URL}/schedule-items?region[in]=${person.regions}&days[in]=${currentDay}`,
-    opts
-  );
-  const hostResponse = await axios.get(
-    `${process.env.REACT_APP_PORTAL_API_BASE_URL}/schedule-items?hosts[in]=${person._id}&days[in]=${currentDay}`,
-    opts
-  );
-  const participantResponse = await axios.get(
-    `${process.env.REACT_APP_PORTAL_API_BASE_URL}/schedule-items?participants[in]=${person._id}&days[in]=${currentDay}`,
-    opts
-  );
-
-  const regionalScheduleItems = (regionalResponse.data?.data || [])
-    .filter(scheduleItem => scheduleItem.participants?.length === 0)
-    .filter(
-      scheduleItem =>
-        scheduleItem.hosts?.filter(host => host._id === person._id).length === 0
+  try {
+    let currentDay;
+    if (config.useDemoDateTimeForSchedule) {
+      currentDay = "monday"; //* Hard code day
+    } else {
+      currentDay = moment().format("dddd").toLowerCase();
+    }
+    const opts = { headers: { Authorization: `Bearer ${token}` } };
+    const regionalResponse = await axios.get(
+      `${process.env.REACT_APP_PORTAL_API_BASE_URL}/schedule-items?region[in]=${person.regions}&days[in]=${currentDay}`,
+      opts
+    );
+    const hostResponse = await axios.get(
+      `${process.env.REACT_APP_PORTAL_API_BASE_URL}/schedule-items?hosts[in]=${person._id}&days[in]=${currentDay}`,
+      opts
+    );
+    const participantResponse = await axios.get(
+      `${process.env.REACT_APP_PORTAL_API_BASE_URL}/schedule-items?participants[in]=${person._id}&days[in]=${currentDay}`,
+      opts
     );
 
-  const todaysScheduleItems = [
-    ...regionalScheduleItems,
-    ...hostResponse.data.data,
-    ...participantResponse.data.data
-  ];
-  return todaysScheduleItems;
+    const regionalScheduleItems = (regionalResponse.data?.data || [])
+      .filter(scheduleItem => scheduleItem.participants?.length === 0)
+      .filter(
+        scheduleItem =>
+          scheduleItem.hosts?.filter(host => host._id === person._id).length ===
+          0
+      );
+
+    const todaysScheduleItems = [
+      ...regionalScheduleItems,
+      ...hostResponse.data.data,
+      ...participantResponse.data.data
+    ];
+    return todaysScheduleItems;
+  } catch (err) {
+    console.error(err);
+    return [];
+  }
 };

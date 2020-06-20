@@ -65,8 +65,13 @@ const DashboardPage = props => {
       <div className="text-center">
         <div className="container mb-5">
           {/* // <!-- TODO Componentize --> */}
-          <h6 className="mt-5">{region.siteContent.title}</h6>
-          <h6>{region.siteContent.subTitle}</h6>
+          <h6 className="mt-5">
+            {region.siteContent?.title ||
+              "I'm unsure of where you are at the moment..."}
+          </h6>
+          <h6>
+            {region.siteContent?.subTitle || "Please contact an administrator"}
+          </h6>
 
           <div className="my-5">
             <AnnouncementListContainer />
@@ -81,7 +86,7 @@ const DashboardPage = props => {
               <strong>Helpful Links</strong>
             </h5>
             <ul className="list-unstyled">
-              {region.siteContent.links
+              {(region.siteContent?.links || [])
                 .filter(link => link.type === "helpful")
                 .map((link, index) => (
                   <li key={`helpful-${index}`}>
@@ -106,7 +111,7 @@ const DashboardPage = props => {
               </div>
               <div className="col">
                 <ul className="list-unstyled">
-                  {region.siteContent.links
+                  {(region.siteContent?.links || [])
                     .filter(link => link.type === "need-help")
                     .map((link, index) => (
                       <li key={`need-help-${index}`}>
