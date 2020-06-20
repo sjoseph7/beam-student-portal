@@ -28,7 +28,7 @@ const Navbar = () => {
           )}
           <a
             className="text-reset ml-3"
-            href="#logout"
+            href="#good-bye👋🏾"
             onClick={() => logout()}
           >
             Logout <i className="fas fa-sign-out-alt"></i>
