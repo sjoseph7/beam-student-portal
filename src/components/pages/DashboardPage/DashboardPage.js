@@ -6,6 +6,7 @@ import Navbar from "../../layout/Navbar/Navbar";
 import ProfileContext from "../../../context/profile/profileContext";
 import { useContext } from "react";
 import axios from "axios";
+import { getGlobalConfig } from "../../../utils/config";
 
 const DashboardPage = props => {
   const { loading, user, getTokenSilently } = useAuth0();
@@ -20,8 +21,9 @@ const DashboardPage = props => {
       try {
         const token = await getTokenSilently();
         const opts = { headers: { Authorization: `Bearer ${token}` } };
+        const { apiBaseUrl } = getGlobalConfig()
         const regionData = await axios.get(
-          `${process.env.REACT_APP_PORTAL_API_BASE_URL}/regions/${
+          `${apiBaseUrl}/regions/${
             profile?.regions[0] || ""
           }`,
           opts

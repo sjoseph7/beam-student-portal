@@ -5,7 +5,7 @@ import ProfileContext from "../../../context/profile/profileContext";
 import { useAuth0 } from "../../../react-auth0-spa";
 import moment from "moment";
 
-import config from "../../../config.json";
+import { getGlobalConfig } from "../../../utils/config";
 
 const ScheduleContainer = () => {
   const { getTokenSilently } = useAuth0();
@@ -58,22 +58,24 @@ const initialScheduleState = {
 const getRelevantScheduleItems = async (person, token) => {
   try {
     let currentDay;
-    if (config.useDemoDateTimeForSchedule) {
+    if (getGlobalConfig().useDemoDateTimeForSchedule) {
       currentDay = "monday"; //* Hard code day
     } else {
       currentDay = moment().format("dddd").toLowerCase();
     }
     const opts = { headers: { Authorization: `Bearer ${token}` } };
+    const { apiBaseUrl } = getGlobalConfig()
+
     const regionalResponse = await axios.get(
-      `${process.env.REACT_APP_PORTAL_API_BASE_URL}/schedule-items?region[in]=${person.regions}&days[in]=${currentDay}`,
+      `${apiBaseUrl}/schedule-items?region[in]=${person.regions}&days[in]=${currentDay}`,
       opts
     );
     const hostResponse = await axios.get(
-      `${process.env.REACT_APP_PORTAL_API_BASE_URL}/schedule-items?hosts[in]=${person._id}&days[in]=${currentDay}`,
+      `${apiBaseUrl}/schedule-items?hosts[in]=${person._id}&days[in]=${currentDay}`,
       opts
     );
     const participantResponse = await axios.get(
-      `${process.env.REACT_APP_PORTAL_API_BASE_URL}/schedule-items?participants[in]=${person._id}&days[in]=${currentDay}`,
+      `${apiBaseUrl}/schedule-items?participants[in]=${person._id}&days[in]=${currentDay}`,
       opts
     );
 

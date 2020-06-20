@@ -4,6 +4,7 @@ import profileReducer from "./profileReducer";
 import axios from "axios";
 import { PROFILE_LOADED, NO_PROFILE } from "../types";
 import { useAuth0 } from "../../react-auth0-spa";
+import { getGlobalConfig } from "../../utils/config";
 
 const ProfileState = props => {
   const [state, dispatch] = useReducer(profileReducer, initialState);
@@ -12,8 +13,9 @@ const ProfileState = props => {
   // Load User Profile
   const loadUserProfile = async () => {
     try {
+      const { apiBaseUrl } = getGlobalConfig()
       const userId = user.sub.split("|")[1];
-      const userProfileEndpoint = `${process.env.REACT_APP_PORTAL_API_BASE_URL}/people/${userId}`;
+      const userProfileEndpoint = `${apiBaseUrl}/people/${userId}`;
 
       const token = await getTokenSilently();
       const response = await axios.get(userProfileEndpoint, {

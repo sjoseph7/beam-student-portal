@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import moment from "moment";
-import config from "../../../config.json";
+import { getGlobalConfig } from "../../../utils/config";
 
 const SimpleScheduleLineItem = ({
   lineItem: { name, startTime, endTime, hosts, links }
@@ -138,7 +138,7 @@ export default SimpleScheduleLineItem;
 
 const isActiveItem = (startTime, endTime) => {
   let currentTime;
-  if (config.useDemoDateTimeForSchedule) {
+  if (getGlobalConfig().useDemoDateTimeForSchedule) {
     currentTime = moment({ hour: 9, minute: 40 }).format("HHmm"); //* Hard code time
   } else {
     currentTime = moment().format("HHmm");

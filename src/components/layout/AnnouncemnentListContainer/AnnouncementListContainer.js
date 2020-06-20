@@ -3,6 +3,7 @@ import AnnouncementList from "../AnnouncementList/AnnouncementList";
 import axios from "axios";
 import ProfileContext from "../../../context/profile/profileContext";
 import { useAuth0 } from "../../../react-auth0-spa";
+import { getGlobalConfig } from "../../../utils/config";
 
 const AnnouncementListContainer = () => {
   const { getTokenSilently } = useAuth0();
@@ -52,12 +53,14 @@ const fetchAnnouncements = async (person, token) => {
         Authorization: `Bearer ${token}`
       }
     };
+    const { apiBaseUrl } = getGlobalConfig()
+
     const regionResponse = await axios.get(
-      `${process.env.REACT_APP_PORTAL_API_BASE_URL}/announcements?regions[in]=${person.regions}`,
+      `${apiBaseUrl}/announcements?regions[in]=${person.regions}`,
       opts
     );
     const recipientSpecificResponse = await axios.get(
-      `${process.env.REACT_APP_PORTAL_API_BASE_URL}/announcements?recipients[in]=${person._id}`,
+      `${apiBaseUrl}/announcements?recipients[in]=${person._id}`,
       opts
     );
 
