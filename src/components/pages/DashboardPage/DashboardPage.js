@@ -3,13 +3,15 @@ import AnnouncementListContainer from "../../layout/AnnouncemnentListContainer/A
 import ScheduleContainer from "../../layout/ScheduleContainer/ScheduleContainer";
 import { useAuth0 } from "../../../react-auth0-spa";
 import Navbar from "../../layout/Navbar/Navbar";
-import AuthContext from "../../../context/auth/authContext";
+import ProfileContext from "../../../context/profile/profileContext";
 import { useContext } from "react";
 import axios from "axios";
 
 const DashboardPage = props => {
   const { loading, user, getTokenSilently } = useAuth0();
-  const { loadingProfile, profile, loadUserProfile } = useContext(AuthContext);
+  const { loadingProfile, profile, loadUserProfile } = useContext(
+    ProfileContext
+  );
   const [region, setRegion] = useState(null);
   const [loadingRegion, setLoadingRegion] = useState(true);
 

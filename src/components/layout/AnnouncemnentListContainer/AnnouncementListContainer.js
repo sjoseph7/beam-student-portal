@@ -1,12 +1,12 @@
 import React, { useEffect, useState, Fragment, useContext } from "react";
 import AnnouncementList from "../AnnouncementList/AnnouncementList";
 import axios from "axios";
-import AuthContext from "../../../context/auth/authContext";
+import ProfileContext from "../../../context/profile/profileContext";
 import { useAuth0 } from "../../../react-auth0-spa";
 
 const AnnouncementListContainer = () => {
   const { getTokenSilently } = useAuth0();
-  const { loadingProfile, profile } = useContext(AuthContext);
+  const { loadingProfile, profile } = useContext(ProfileContext);
 
   const [announcements, setAnnouncements] = useState(null);
 

@@ -1,13 +1,13 @@
 import React, { useEffect, useState, useContext } from "react";
 import SimpleSchedule from "../SimpleSchedule/SimpleSchedule";
 import axios from "axios";
-import AuthContext from "../../../context/auth/authContext";
+import ProfileContext from "../../../context/profile/profileContext";
 import { useAuth0 } from "../../../react-auth0-spa";
 import moment from "moment";
 
 const ScheduleContainer = () => {
   const { getTokenSilently } = useAuth0();
-  const { loadingProfile, profile } = useContext(AuthContext);
+  const { loadingProfile, profile } = useContext(ProfileContext);
   const [schedule, setSchedule] = useState(initialScheduleState);
 
   useEffect(() => {

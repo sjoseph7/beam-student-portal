@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import AuthState from "./context/auth/AuthState";
+import ProfileState from "./context/profile/ProfileState";
 import DashboardPage from "./components/pages/DashboardPage/DashboardPage";
 import { useAuth0 } from "./react-auth0-spa";
 import PrivateRoute from "./components/PrivateRoute";
@@ -24,14 +24,14 @@ const App = () => {
   }
 
   return (
-    <AuthState>
+    <ProfileState>
       <Router>
         <Switch>
           <Route exact path="/" component={LandingPage} />
           <PrivateRoute exact path="/dashboard" component={DashboardPage} />
         </Switch>
       </Router>
-    </AuthState>
+    </ProfileState>
   );
 };
 

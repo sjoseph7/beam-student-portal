@@ -1,11 +1,11 @@
 import React, { Fragment } from "react";
 import { useAuth0 } from "../../../react-auth0-spa";
-import AuthContext from "../../../context/auth/authContext";
+import ProfileContext from "../../../context/profile/profileContext";
 import { useContext } from "react";
 
 const Navbar = () => {
   const { isAuthenticated, loginWithRedirect, logout } = useAuth0();
-  const { profile } = useContext(AuthContext);
+  const { profile } = useContext(ProfileContext);
 
   return (
     <nav className="navbar navbar-light bg-light">
