@@ -11,7 +11,6 @@ export const ProfileProvider = ({ children }) => {
   const [loading, setLoading] = useState(true)
   const [data, setData] = useState({})
 
-  // Load User Profile
   useEffect(() => {
     if (auth0loading) return
     loadAllData(
@@ -99,12 +98,13 @@ async function loadAllData(setData, setLoading, user, token) {
 
   async function loadSchedule () {
     const { regions, _id } = await data.profile
-    const currentDay = (
+    const now = (
       getGlobalConfig().useDemoDateTimeForSchedule
-      ? "monday"
-      : moment().format("dddd").toLowerCase()
+      ? moment('2020-06-22 09:40')
+      : moment()
     )
-
+    
+    const currentDay = now.format("dddd").toLowerCase()
     const regionalEvents = await get(
       `/schedule-items?region[in]=${regions}&days[in]=${currentDay}`
     );
@@ -127,6 +127,6 @@ async function loadAllData(setData, setLoading, user, token) {
       ...participantEvents
     ];
 
-    return { lineItems }
+    return { lineItems, now }
   };
 }

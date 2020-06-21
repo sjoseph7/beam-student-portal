@@ -1,17 +1,19 @@
-import React, { Fragment } from "react";
+import React from "react";
 import moment from "moment";
-import { getGlobalConfig } from "../../../utils/config";
+import { useProfile } from "../../../context/profile";
 
 const SimpleScheduleLineItem = ({
   lineItem: { name, startTime, endTime, hosts, links }
 }) => {
+  const { now } = useProfile().schedule
+
   const [openLearningLinks, adobeConnectLinks] = sortLinksIntoGroups(links, [
     "open-learning",
     "adobe-connect"
   ]);
 
   return (
-    <Fragment>
+    <>
       <div className="my-3">
         <span>
           {`${moment(startTime).format("h:mma")}-${moment(endTime).format(
@@ -20,7 +22,7 @@ const SimpleScheduleLineItem = ({
         </span>
         <div
           className={`card ${
-            isActiveItem(startTime, endTime) && "shadow border-primary"
+            isActiveItem(now, startTime, endTime) && "shadow border-primary"
           }`}
         >
           <div className="card-body">
@@ -104,7 +106,7 @@ const SimpleScheduleLineItem = ({
           </div>
         </div>
       </div>
-    </Fragment>
+    </>
   );
 };
 
@@ -136,14 +138,8 @@ const sortLinksIntoGroups = (links, groupNames) => {
 
 export default SimpleScheduleLineItem;
 
-const isActiveItem = (startTime, endTime) => {
-  let currentTime;
-  if (getGlobalConfig().useDemoDateTimeForSchedule) {
-    currentTime = moment({ hour: 9, minute: 40 }).format("HHmm"); //* Hard code time
-  } else {
-    currentTime = moment().format("HHmm");
-  }
-
+const isActiveItem = (now, startTime, endTime) => {
+  const currentTime = now.format("HHmm");
   startTime = moment(startTime).format("HHmm");
   endTime = moment(endTime).format("HHmm");
   return currentTime >= startTime && currentTime <= endTime;

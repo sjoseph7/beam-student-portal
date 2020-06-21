@@ -1,14 +1,13 @@
 import React, { Fragment } from "react";
 import SimpleScheduleLineItem from "../SimpleScheduleLineItem/SimpleScheduleLineItem";
-
-import moment from "moment";
-// eslint-disable-next-line
+import { useProfile } from "../../../context/profile";
 
 const SimpleSchedule = ({ lineItems }) => {
+  const { now } = useProfile().schedule
   return (
     <Fragment>
       <h5>
-        TODAY <strong>{moment().format("dddd, DD MMMM yyy")}</strong>
+        TODAY <strong>{now.format("dddd, DD MMMM yyy")}</strong>
       </h5>
       {lineItems?.length > 0 ? (
         lineItems
