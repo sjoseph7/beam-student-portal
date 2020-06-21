@@ -1,10 +1,9 @@
-import React from "react";
-import AnnouncementList from "../AnnouncementList/AnnouncementList";
-import { useProfile } from "../../../context/profile";
-
+import React from 'react'
+import AnnouncementList from '../AnnouncementList/AnnouncementList'
+import { useProfile } from '../../../context/profile'
 
 const AnnouncementListContainer = () => {
-  const { announcements } = useProfile();
+  const { announcements } = useProfile()
 
   return (
     <>
@@ -22,8 +21,7 @@ const AnnouncementListContainer = () => {
         <AnnouncementList announcements={announcements} />
       )}
     </>
-  );
-};
+  )
+}
 
-export default AnnouncementListContainer;
-
+export default AnnouncementListContainer

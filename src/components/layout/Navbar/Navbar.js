@@ -1,10 +1,10 @@
-import React from "react";
+import React from 'react'
 import { useAuth0 } from '../../../context/auth0'
-import { useProfile } from "../../../context/profile";
+import { useProfile } from '../../../context/profile'
 
 const Navbar = () => {
-  const { logout } = useAuth0();
-  const { profile } = useProfile();
+  const { logout } = useAuth0()
+  const { profile } = useProfile()
 
   return (
     <nav className="navbar navbar-light bg-light">
@@ -24,7 +24,7 @@ const Navbar = () => {
         Logout <i className="fas fa-sign-out-alt"></i>
       </a>
     </nav>
-  );
-};
+  )
+}
 
-export default Navbar;
+export default Navbar

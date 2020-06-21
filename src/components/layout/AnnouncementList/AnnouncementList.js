@@ -1,5 +1,5 @@
-import React from "react";
-import Announcement from "../Announcement/Announcement";
+import React from 'react'
+import Announcement from '../Announcement/Announcement'
 
 const AnnouncementList = ({ announcements }) => {
   return announcements && announcements.length > 0 ? (
@@ -8,7 +8,7 @@ const AnnouncementList = ({ announcements }) => {
     ))
   ) : (
     <p>No announcements today.</p>
-  );
-};
+  )
+}
 
-export default AnnouncementList;
+export default AnnouncementList

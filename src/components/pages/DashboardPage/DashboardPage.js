@@ -1,12 +1,11 @@
-import React from "react";
-import AnnouncementListContainer from "../../layout/AnnouncemnentListContainer/AnnouncementListContainer";
-import ScheduleContainer from "../../layout/ScheduleContainer/ScheduleContainer";
-import Navbar from "../../layout/Navbar/Navbar";
-import { useProfile } from "../../../context/profile";
-
+import React from 'react'
+import AnnouncementListContainer from '../../layout/AnnouncemnentListContainer/AnnouncementListContainer'
+import ScheduleContainer from '../../layout/ScheduleContainer/ScheduleContainer'
+import Navbar from '../../layout/Navbar/Navbar'
+import { useProfile } from '../../../context/profile'
 
 const DashboardPage = () => {
-  const { region } = useProfile();
+  const { region } = useProfile()
 
   return (
     <>
@@ -20,7 +19,7 @@ const DashboardPage = () => {
               "I'm unsure of where you are at the moment..."}
           </h6>
           <h6>
-            {region.siteContent?.subTitle || "Please contact an administrator"}
+            {region.siteContent?.subTitle || 'Please contact an administrator'}
           </h6>
 
           <div className="my-5">
@@ -37,7 +36,7 @@ const DashboardPage = () => {
             </h5>
             <ul className="list-unstyled">
               {(region.siteContent?.links || [])
-                .filter(link => link.type === "helpful")
+                .filter((link) => link.type === 'helpful')
                 .map((link, index) => (
                   <li key={`helpful-${index}`}>
                     <a href={link.url}>{link.text}</a>
@@ -62,7 +61,7 @@ const DashboardPage = () => {
               <div className="col">
                 <ul className="list-unstyled">
                   {(region.siteContent?.links || [])
-                    .filter(link => link.type === "need-help")
+                    .filter((link) => link.type === 'need-help')
                     .map((link, index) => (
                       <li key={`need-help-${index}`}>
                         <a href={link.url}>{link.text}</a>
@@ -93,7 +92,7 @@ const DashboardPage = () => {
         </footer>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default DashboardPage;
+export default DashboardPage

@@ -1,13 +1,13 @@
-import React, { useState, useEffect, useContext, createContext } from "react";
-import moment from "moment";
-import { getGlobalConfig } from "../utils/config";
-import { useAuth0 } from "./auth0";
+import React, { useState, useEffect, useContext, createContext } from 'react'
+import moment from 'moment'
+import { getGlobalConfig } from '../utils/config'
+import { useAuth0 } from './auth0'
 
-const ProfileContext = createContext();
+const ProfileContext = createContext()
 export const useProfile = () => useContext(ProfileContext)
 
 export const ProfileProvider = ({ children }) => {
-  const { loading: auth0loading, user, token } = useAuth0();
+  const { loading: auth0loading, user, token } = useAuth0()
   const [loading, setLoading] = useState(true)
   const [data, setData] = useState({})
 
@@ -15,11 +15,13 @@ export const ProfileProvider = ({ children }) => {
     if (auth0loading) return
     loadAllData(
       // react hooks must be called from within a component function
-      x => setData(x),
-      x => setLoading(x),
+      (x) => setData(x),
+      (x) => setLoading(x),
       user,
       token,
-    ).then(console.log).catch(console.error)
+    )
+      .then(console.log)
+      .catch(console.error)
   }, [auth0loading, token, user])
 
   // Clear Errors
@@ -32,8 +34,8 @@ export const ProfileProvider = ({ children }) => {
     >
       {children}
     </ProfileContext.Provider>
-  );
-};
+  )
+}
 
 async function loadAllData(setData, setLoading, user, token) {
   const data = {}
@@ -44,7 +46,7 @@ async function loadAllData(setData, setLoading, user, token) {
   data.schedule = loadSchedule()
 
   await Promise.all(
-    Object.entries(data).map(async ([k, p]) => data[k] = await p)
+    Object.entries(data).map(async ([k, p]) => (data[k] = await p)),
   )
 
   console.log(data)
@@ -60,11 +62,11 @@ async function loadAllData(setData, setLoading, user, token) {
   async function get(path) {
     path = path.replace(/^\/+/, '')
     const { apiBaseUrl } = getGlobalConfig()
-    const endpoint = `${apiBaseUrl}/${path}`;
+    const endpoint = `${apiBaseUrl}/${path}`
 
     const headers = { Authorization: `Bearer ${token}` }
 
-    const response = await fetch(endpoint, { headers });
+    const response = await fetch(endpoint, { headers })
 
     if (response.ok) {
       return (await response.json()).data
@@ -73,60 +75,62 @@ async function loadAllData(setData, setLoading, user, token) {
     }
   }
 
-  async function loadUserProfile () {
-    const { userId } = user;
-    return await get(`/people/${userId}`);
-  };
+  async function loadUserProfile() {
+    const { userId } = user
+    return await get(`/people/${userId}`)
+  }
 
-  async function loadRegionData () {
+  async function loadRegionData() {
     const { regions } = await data.profile
-    return await get(`/regions/${regions[0]}`);
-  };
+    return await get(`/regions/${regions[0]}`)
+  }
 
   async function loadAnnouncements() {
     const { regions, _id } = await data.profile
-    const regionAnnouncements = await get(`/announcements?regions[in]=${regions}`);
-    const targetAnnouncements = await get(`/announcements?recipients[in]=${_id}`);
+    const regionAnnouncements = await get(
+      `/announcements?regions[in]=${regions}`,
+    )
+    const targetAnnouncements = await get(
+      `/announcements?recipients[in]=${_id}`,
+    )
 
     const announcements = [
-      ...regionAnnouncements.filter(x => !x.recipients.length),
+      ...regionAnnouncements.filter((x) => !x.recipients.length),
       ...targetAnnouncements,
-    ].map(({ message }) => message);
+    ].map(({ message }) => message)
 
-    return announcements;  
+    return announcements
   }
 
-  async function loadSchedule () {
+  async function loadSchedule() {
     const { regions, _id } = await data.profile
-    const now = (
-      getGlobalConfig().useDemoDateTimeForSchedule
+    const now = getGlobalConfig().useDemoDateTimeForSchedule
       ? moment('2020-06-22 09:40')
       : moment()
-    )
-    
-    const currentDay = now.format("dddd").toLowerCase()
+
+    const currentDay = now.format('dddd').toLowerCase()
     const regionalEvents = await get(
-      `/schedule-items?region[in]=${regions}&days[in]=${currentDay}`
-    );
+      `/schedule-items?region[in]=${regions}&days[in]=${currentDay}`,
+    )
     const hostedEvents = await get(
-      `/schedule-items?hosts[in]=${_id}&days[in]=${currentDay}`
-    );
+      `/schedule-items?hosts[in]=${_id}&days[in]=${currentDay}`,
+    )
     const participantEvents = await get(
-      `/schedule-items?participants[in]=${_id}&days[in]=${currentDay}`
-    );
+      `/schedule-items?participants[in]=${_id}&days[in]=${currentDay}`,
+    )
 
     const filteredRegionalEvents = regionalEvents
       .filter(({ participants }) => participants.length === 0)
       .filter(
-        ({ hosts }) => hosts.filter(host => host._id === _id).length === 0
-      );
+        ({ hosts }) => hosts.filter((host) => host._id === _id).length === 0,
+      )
 
     const lineItems = [
       ...filteredRegionalEvents,
       ...hostedEvents,
-      ...participantEvents
-    ];
+      ...participantEvents,
+    ]
 
     return { lineItems, now }
-  };
+  }
 }

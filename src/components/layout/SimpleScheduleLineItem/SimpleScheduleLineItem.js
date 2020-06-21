@@ -1,28 +1,28 @@
-import React from "react";
-import moment from "moment";
-import { useProfile } from "../../../context/profile";
+import React from 'react'
+import moment from 'moment'
+import { useProfile } from '../../../context/profile'
 
 const SimpleScheduleLineItem = ({
-  lineItem: { name, startTime, endTime, hosts, links }
+  lineItem: { name, startTime, endTime, hosts, links },
 }) => {
   const { now } = useProfile().schedule
 
   const [openLearningLinks, adobeConnectLinks] = sortLinksIntoGroups(links, [
-    "open-learning",
-    "adobe-connect"
-  ]);
+    'open-learning',
+    'adobe-connect',
+  ])
 
   return (
     <>
       <div className="my-3">
         <span>
-          {`${moment(startTime).format("h:mma")}-${moment(endTime).format(
-            "h:mma"
+          {`${moment(startTime).format('h:mma')}-${moment(endTime).format(
+            'h:mma',
           )}`}
         </span>
         <div
           className={`card ${
-            isActiveItem(now, startTime, endTime) && "shadow border-primary"
+            isActiveItem(now, startTime, endTime) && 'shadow border-primary'
           }`}
         >
           <div className="card-body">
@@ -33,7 +33,7 @@ const SimpleScheduleLineItem = ({
                   href={adobeConnectLinks[0].url}
                   className="btn btn-primary ml-2 float-right"
                 >
-                  {adobeConnectLinks[0].text || "Join Room"}
+                  {adobeConnectLinks[0].text || 'Join Room'}
                 </a>
               ) : (
                 <div className="btn-group ml-2 float-right">
@@ -44,7 +44,7 @@ const SimpleScheduleLineItem = ({
                     aria-haspopup="true"
                     aria-expanded="false"
                   >
-                    Choose{" "}
+                    Choose{' '}
                   </button>
                   <div className="dropdown-menu">
                     {adobeConnectLinks
@@ -55,7 +55,7 @@ const SimpleScheduleLineItem = ({
                           className="dropdown-item"
                           href={adobeConnectLink.url}
                         >
-                          {adobeConnectLink.text || "Join!"}
+                          {adobeConnectLink.text || 'Join!'}
                         </a>
                       ))}
                   </div>
@@ -70,7 +70,7 @@ const SimpleScheduleLineItem = ({
                   href={openLearningLinks[0].url}
                   className="btn btn-secondary ml-2 float-right"
                 >
-                  {openLearningLinks[0].text || "Join Room"}
+                  {openLearningLinks[0].text || 'Join Room'}
                 </a>
               ) : (
                 <div className="btn-group ml-2 float-right">
@@ -81,7 +81,7 @@ const SimpleScheduleLineItem = ({
                     aria-haspopup="true"
                     aria-expanded="false"
                   >
-                    Choose{" "}
+                    Choose{' '}
                   </button>
                   <div className="dropdown-menu">
                     {openLearningLinks
@@ -92,29 +92,29 @@ const SimpleScheduleLineItem = ({
                           className="dropdown-item"
                           href={adobeConnectLink.url}
                         >
-                          {adobeConnectLink.text || "Join!"}
+                          {adobeConnectLink.text || 'Join!'}
                         </a>
                       ))}
                   </div>
                 </div>
               ))}
             {/* /Componentize this */}
-            <h5 className="card-title">{name || "No Name"}</h5>
+            <h5 className="card-title">{name || 'No Name'}</h5>
             <h6 className="card-subtitle mb-2 text-muted">
-              <em>With {hosts.map(host => host.firstName).join(", ")}</em>
+              <em>With {hosts.map((host) => host.firstName).join(', ')}</em>
             </h6>
           </div>
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
 const sortLinksIntoGroups = (links, groupNames) => {
-  return groupNames.map(groupName =>
-    links.filter(link => link.type === groupName)
-  );
-};
+  return groupNames.map((groupName) =>
+    links.filter((link) => link.type === groupName),
+  )
+}
 /**
  * {
     "name": "New-Item!",
@@ -136,15 +136,15 @@ const sortLinksIntoGroups = (links, groupNames) => {
   }
  */
 
-export default SimpleScheduleLineItem;
+export default SimpleScheduleLineItem
 
 const isActiveItem = (now, startTime, endTime) => {
-  const currentTime = now.format("HHmm");
-  startTime = moment(startTime).format("HHmm");
-  endTime = moment(endTime).format("HHmm");
-  return currentTime >= startTime && currentTime <= endTime;
-};
+  const currentTime = now.format('HHmm')
+  startTime = moment(startTime).format('HHmm')
+  endTime = moment(endTime).format('HHmm')
+  return currentTime >= startTime && currentTime <= endTime
+}
 
 const sortLinksByText = (a, b) => {
-  return a.text < b.text ? -1 : 1;
-};
+  return a.text < b.text ? -1 : 1
+}
