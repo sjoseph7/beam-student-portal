@@ -46,6 +46,7 @@ const SimpleScheduleLineItem = ({
               (fixedAdobeConnectLinks.length === 1 ? (
                 <a
                   href={fixedAdobeConnectLinks[0].url}
+                  target="_blank"
                   className="btn btn-primary ml-2 float-right"
                 >
                   {fixedAdobeConnectLinks[0].text || 'Join Room'}
@@ -69,6 +70,7 @@ const SimpleScheduleLineItem = ({
                           key={index}
                           className="dropdown-item"
                           href={adobeConnectLink.url}
+                          target="_blank"
                         >
                           {adobeConnectLink.text || 'Join!'}
                         </a>
@@ -87,6 +89,7 @@ const SimpleScheduleLineItem = ({
                     token,
                   )}
                   href={openLearningLinks[0].url}
+                  target="_blank"
                   className="btn btn-secondary ml-2 float-right"
                 >
                   {openLearningLinks[0].text || 'Join Room'}
@@ -110,6 +113,7 @@ const SimpleScheduleLineItem = ({
                           key={`ac-${index}`}
                           className="dropdown-item"
                           href={link.url}
+                          target="_blank"
                           onclick={makeOpenLearningSSOHandler(link.url, token)}
                         >
                           {link.text || 'Join!'}
@@ -182,26 +186,11 @@ function makeOpenLearningSSOHandler(link, token) {
       form.appendChild(el)
     }
 
-    // let el
-    // el = document.createElement('input');el.type='hidden';el.name='resource_link_id';el.value='launch-5ee515553df66afed7a63f77';form.appendChild(el)
-    // el = document.createElement('input');el.type='hidden';el.name='user_id';el.value='test_student';form.appendChild(el)
-    // el = document.createElement('input');el.type='hidden';el.name='oauth_nonce';el.value='jeKAt8Ezpmlo69nWzireoYOUTHJUbzNj';form.appendChild(el)
-    // el = document.createElement('input');el.type='hidden';el.name='oauth_timestamp';el.value='1592721044';form.appendChild(el)
-    // el = document.createElement('input');el.type='hidden';el.name='oauth_consumer_key';el.value='institution:beam';form.appendChild(el)
-    // el = document.createElement('input');el.type='hidden';el.name='lti_version';el.value='LTI-1p0';form.appendChild(el)
-    // el = document.createElement('input');el.type='hidden';el.name='oauth_signature_method';el.value='HMAC-SHA1';form.appendChild(el)
-    // el = document.createElement('input');el.type='hidden';el.name='oauth_version';el.value='1.0';form.appendChild(el)
-    // el = document.createElement('input');el.type='hidden';el.name='oauth_signature';el.value='w0hgT3N/Tt21LTgQkeZKlIINga4=';form.appendChild(el)
-    // el = document.createElement('input');el.type='hidden';el.name='lti_message_type';el.value='basic-lti-launch-request';form.appendChild(el)
-
     document.body.appendChild(form)
     form.submit()
 
     await new Promise((resolve) => (iframe.onload = resolve))
 
-    window.open(
-      'https://www.openlearning.com/beam/courses/test-course-for-testing2/',
-      '_blank',
-    )
+    window.open(link, '_blank')
   }
 }
