@@ -50,7 +50,6 @@ async function loadAllData(setData, setLoading, user, token) {
   )
 
   console.log(data)
-
   setData(data)
   setLoading(false)
 
@@ -105,10 +104,10 @@ async function loadAllData(setData, setLoading, user, token) {
   async function loadSchedule() {
     const { regions, _id } = await data.profile
     const now = getGlobalConfig().useDemoDateTimeForSchedule
-      ? moment('2020-06-22 09:40')
-      : moment()
+      ? '2020-06-22 09:40'
+      : ''
 
-    const currentDay = now.format('dddd').toLowerCase()
+    const currentDay = moment(now).format('dddd').toLowerCase()
     // const regionalEvents = await get(
     //   `/schedule-items?region[in]=${regions}&days[in]=${currentDay}`,
     // )

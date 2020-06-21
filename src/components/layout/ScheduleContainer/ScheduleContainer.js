@@ -6,7 +6,7 @@ const ScheduleContainer = () => {
   const { schedule } = useProfile()
 
   return (
-    <div className="text-left">
+    <div className="text-left" style={{ maxWidth: 500, margin: 'auto' }}>
       <SimpleSchedule lineItems={schedule.lineItems} />
     </div>
   )

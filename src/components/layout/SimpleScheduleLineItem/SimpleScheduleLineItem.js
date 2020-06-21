@@ -6,6 +6,7 @@ const SimpleScheduleLineItem = ({
   lineItem: { name, startTime, endTime, hosts, links },
 }) => {
   const { now } = useProfile().schedule
+  console.log(now)
 
   const [openLearningLinks, adobeConnectLinks] = sortLinksIntoGroups(links, [
     'open-learning',
@@ -115,31 +116,10 @@ const sortLinksIntoGroups = (links, groupNames) => {
     links.filter((link) => link.type === groupName),
   )
 }
-/**
- * {
-    "name": "New-Item!",
-    "days": ["monday", "thursday"],
-    "region": "6dc4fc8194f68a3cbc7c69a1",
-    "startTime": {"hour":23, "minute":0},
-    "endTime": {"hour":23, "minute":59},
-    "hosts": ["2dc4fc8194f68a3cbc7c69a4"],
-    "participants": ["2dc4fc8194f68a3cbc7c69a2"],
-    "links":[{
-      "text": "Join NOW!",
-      "type":"adobe-connect",
-      "url":"#!"
-    },{
-      "text": "Join NOW!",
-      "type":"adobe-connect",
-      "url":"#!"
-    }]
-  }
- */
-
 export default SimpleScheduleLineItem
 
 const isActiveItem = (now, startTime, endTime) => {
-  const currentTime = now.format('HHmm')
+  const currentTime = moment(now).format('HHmm')
   startTime = moment(startTime).format('HHmm')
   endTime = moment(endTime).format('HHmm')
   return currentTime >= startTime && currentTime <= endTime
