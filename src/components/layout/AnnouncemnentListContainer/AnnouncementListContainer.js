@@ -3,7 +3,7 @@ import AnnouncementList from "../AnnouncementList/AnnouncementList";
 import axios from "axios";
 import ProfileContext from "../../../context/profile/profileContext";
 import { getGlobalConfig } from "../../../utils/config";
-import { useAuth0 } from "../../../utils/auth0/provider";
+import { useAuth0 } from "../../../context/auth0/provider";
 
 
 const AnnouncementListContainer = () => {

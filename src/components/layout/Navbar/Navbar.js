@@ -1,10 +1,10 @@
-import React, { Fragment } from "react";
+import React from "react";
 import ProfileContext from "../../../context/profile/profileContext";
 import { useContext } from "react";
-import { useAuth0 } from '../../../utils/auth0/provider'
+import { useAuth0 } from '../../../context/auth0/provider'
 
 const Navbar = () => {
-  const { user, logout } = useAuth0();
+  const { logout } = useAuth0();
   const { profile } = useContext(ProfileContext);
 
   return (

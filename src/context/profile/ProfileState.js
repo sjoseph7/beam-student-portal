@@ -4,7 +4,7 @@ import profileReducer from "./profileReducer";
 import axios from "axios";
 import { PROFILE_LOADED, NO_PROFILE } from "../types";
 import { getGlobalConfig } from "../../utils/config";
-import { useAuth0 } from '../../utils/auth0/provider'
+import { useAuth0 } from '../auth0/provider'
 
 const ProfileState = props => {
   const [state, dispatch] = useReducer(profileReducer, initialState);

@@ -4,8 +4,8 @@ import ProfileState from "./context/profile/ProfileState";
 import DashboardPage from "./components/pages/DashboardPage/DashboardPage";
 import "./App.module.css";
 import { messages } from "./loadingMessages.json";
-import { withAuthentication } from './utils/auth0/with-authentication'
-import { useAuth0 } from "./utils/auth0/provider";
+import { withAuthentication } from './context/auth0/with-authentication'
+import { useAuth0 } from "./context/auth0/provider";
 
 
 const App = () => {
