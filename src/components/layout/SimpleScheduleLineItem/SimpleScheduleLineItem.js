@@ -6,12 +6,24 @@ const SimpleScheduleLineItem = ({
   lineItem: { name, startTime, endTime, hosts, links },
 }) => {
   const { now } = useProfile().schedule
-  console.log(now)
 
   const [openLearningLinks, adobeConnectLinks] = sortLinksIntoGroups(links, [
     'open-learning',
     'adobe-connect',
   ])
+
+  const fixedAdobeConnectLinks = adobeConnectLinks.map((link) => {
+    const { url } = link
+
+    const matches = /^https:\/\/beam.adobeconnect.com(\/[^/]+\/?)$/.exec(url)
+    if (!matches) return link
+
+    const slug = matches[1]
+    return {
+      ...link,
+      url: `https://beammath.us.auth0.com/samlp/8W8pxzvINgiyEM8aNvNoQBuKtjsW38xC?RelayState={"action":"CPS_WORKFLOW","redirect":"${slug}"}`,
+    }
+  })
 
   return (
     <>
@@ -28,13 +40,13 @@ const SimpleScheduleLineItem = ({
         >
           <div className="card-body">
             {/* Componentize this */}
-            {adobeConnectLinks.length > 0 &&
-              (adobeConnectLinks.length === 1 ? (
+            {fixedAdobeConnectLinks.length > 0 &&
+              (fixedAdobeConnectLinks.length === 1 ? (
                 <a
-                  href={adobeConnectLinks[0].url}
+                  href={fixedAdobeConnectLinks[0].url}
                   className="btn btn-primary ml-2 float-right"
                 >
-                  {adobeConnectLinks[0].text || 'Join Room'}
+                  {fixedAdobeConnectLinks[0].text || 'Join Room'}
                 </a>
               ) : (
                 <div className="btn-group ml-2 float-right">
@@ -48,7 +60,7 @@ const SimpleScheduleLineItem = ({
                     Choose{' '}
                   </button>
                   <div className="dropdown-menu">
-                    {adobeConnectLinks
+                    {fixedAdobeConnectLinks
                       .sort(sortLinksByText)
                       .map((adobeConnectLink, index) => (
                         <a
