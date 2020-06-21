@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import ProfileState from "./context/profile/ProfileState";
 import DashboardPage from "./components/pages/DashboardPage/DashboardPage";
 import "./App.module.css";
 import { messages } from "./loadingMessages.json";
@@ -23,13 +22,11 @@ const App = () => {
   }
 
   return (
-    <ProfileState>
-      <Router>
-        <Switch>
-          <Route exact path="/" component={DashboardPage} />
-        </Switch>
-      </Router>
-    </ProfileState>
+    <Router>
+      <Switch>
+        <Route exact path="/" component={DashboardPage} />
+      </Switch>
+    </Router>
   );
 };
 

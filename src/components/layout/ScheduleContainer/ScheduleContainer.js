@@ -1,14 +1,14 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import SimpleSchedule from "../SimpleSchedule/SimpleSchedule";
 import axios from "axios";
-import ProfileContext from "../../../context/profile/profileContext";
 import moment from "moment";
 import { getGlobalConfig } from "../../../utils/config";
 import { useAuth0 } from '../../../context/auth0/provider'
+import { useProfile } from "../../../context/profile";
 
 const ScheduleContainer = () => {
   const { token } = useAuth0();
-  const { loadingProfile, profile } = useContext(ProfileContext);
+  const { profile } = useProfile();
   const [schedule, setSchedule] = useState(initialScheduleState);
 
   useEffect(() => {
@@ -21,13 +21,13 @@ const ScheduleContainer = () => {
       }
     };
 
-    if (!loadingProfile && profile) {
+    if (profile) {
       if (schedule.lineItems === null) {
         getFormattedScheduleItems();
       }
     }
     //eslint-disable-next-line
-  }, [loadingProfile, profile]);
+  }, [profile]);
 
   return (
     <div className="text-left">

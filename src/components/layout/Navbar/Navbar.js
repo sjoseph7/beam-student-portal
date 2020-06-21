@@ -1,11 +1,10 @@
 import React from "react";
-import ProfileContext from "../../../context/profile/profileContext";
-import { useContext } from "react";
 import { useAuth0 } from '../../../context/auth0/provider'
+import { useProfile } from "../../../context/profile";
 
 const Navbar = () => {
   const { logout } = useAuth0();
-  const { profile } = useContext(ProfileContext);
+  const { profile } = useProfile();
 
   return (
     <nav className="navbar navbar-light bg-light">

@@ -1,14 +1,14 @@
-import React, { useEffect, useState, Fragment, useContext } from "react";
+import React, { useEffect, useState, Fragment } from "react";
 import AnnouncementList from "../AnnouncementList/AnnouncementList";
 import axios from "axios";
-import ProfileContext from "../../../context/profile/profileContext";
 import { getGlobalConfig } from "../../../utils/config";
 import { useAuth0 } from "../../../context/auth0/provider";
+import { useProfile } from "../../../context/profile";
 
 
 const AnnouncementListContainer = () => {
   const { token } = useAuth0();
-  const { loadingProfile, profile } = useContext(ProfileContext);
+  const { profile } = useProfile();
 
   const [announcements, setAnnouncements] = useState(null);
 
@@ -17,13 +17,13 @@ const AnnouncementListContainer = () => {
       const announcements = await fetchAnnouncements(profile, token);
       setAnnouncements(announcements);
     };
-    if (!loadingProfile && profile) {
+    if (profile) {
       if (announcements === null) {
         getAnnouncements();
       }
     }
     //eslint-disable-next-line
-  }, [loadingProfile, profile]);
+  }, [profile]);
 
   return (
     <Fragment>

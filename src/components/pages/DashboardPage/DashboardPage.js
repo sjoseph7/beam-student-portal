@@ -1,20 +1,17 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import AnnouncementListContainer from "../../layout/AnnouncemnentListContainer/AnnouncementListContainer";
 import ScheduleContainer from "../../layout/ScheduleContainer/ScheduleContainer";
 import Navbar from "../../layout/Navbar/Navbar";
-import ProfileContext from "../../../context/profile/profileContext";
-import { useContext } from "react";
 import axios from "axios";
 import { getGlobalConfig } from "../../../utils/config";
 import { useAuth0 } from "../../../context/auth0/provider";
+import { useProfile } from "../../../context/profile";
 
 
 const DashboardPage = props => {
-  const { loading, user, token } = useAuth0();
-  const { loadingProfile, profile, loadUserProfile } = useContext(
-    ProfileContext
-  );
-  const [region, setRegion] = useState(null);
+  const { user, token } = useAuth0();
+  const { profile } = useProfile();
+  const [region, setRegion] = useState({});
   const [loadingRegion, setLoadingRegion] = useState(true);
 
   useEffect(() => {
@@ -35,33 +32,16 @@ const DashboardPage = props => {
       }
     };
 
-    if (!loading && user && loadingProfile) {
-      loadUserProfile();
-      console.log("loading profile!");
-    } else if (!loadingProfile && profile) {
-      console.log("profile loaded!");
-    } else if (!loadingProfile && !profile) {
-      console.log("no profile...");
-    }
-
-    if (!loadingProfile && profile && loadingRegion) {
+    if (profile && loadingRegion) {
       console.log("loading region[0]");
       getRegionData();
     }
 
     //eslint-disable-next-line
-  }, [loading, user, loadingProfile, profile]);
-
-  if (loading || !user) {
-    return <div>Cleaning up...</div>;
-  }
-
-  if (!profile || !region) {
-    return <div>Finishing up...</div>;
-  }
+  }, [user, profile]);
 
   return (
-    <Fragment>
+    <>
       <Navbar />
 
       <div className="text-center">
@@ -144,7 +124,7 @@ const DashboardPage = props => {
           </div>
         </footer>
       </div>
-    </Fragment>
+    </>
   );
 };
 
