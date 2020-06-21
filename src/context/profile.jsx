@@ -38,6 +38,7 @@ export const ProfileProvider = ({ children }) => {
 }
 
 async function loadAllData(setData, setLoading, user, token) {
+  const get = (path) => api_get(token, path)
   const data = {}
 
   data.profile = loadUserProfile()
@@ -58,22 +59,6 @@ async function loadAllData(setData, setLoading, user, token) {
   // -----------------------
   // helper functions are hoisted
   // -----------------------
-  async function get(path) {
-    path = path.replace(/^\/+/, '')
-    const { apiBaseUrl } = getGlobalConfig()
-    const endpoint = `${apiBaseUrl}/${path}`
-
-    const headers = { Authorization: `Bearer ${token}` }
-
-    const response = await fetch(endpoint, { headers })
-
-    if (response.ok) {
-      return (await response.json()).data
-    } else {
-      console.error(await response.text())
-    }
-  }
-
   async function loadUserProfile() {
     const { userId } = user
     return await get(`/people/${userId}`)
@@ -131,5 +116,20 @@ async function loadAllData(setData, setLoading, user, token) {
     ]
 
     return { lineItems, now }
+  }
+}
+
+export async function api_get(token, path) {
+  path = path.replace(/^\/+/, '')
+  const { apiBaseUrl } = getGlobalConfig()
+  const endpoint = `${apiBaseUrl}/${path}`
+
+  const headers = { Authorization: `Bearer ${token}` }
+  const response = await fetch(endpoint, { headers })
+
+  if (response.ok) {
+    return (await response.json()).data
+  } else {
+    console.error(await response.text())
   }
 }

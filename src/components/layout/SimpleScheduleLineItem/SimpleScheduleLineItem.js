@@ -1,10 +1,12 @@
 import React from 'react'
 import moment from 'moment'
-import { useProfile } from '../../../context/profile'
+import { useProfile, api_get } from '../../../context/profile'
+import { useAuth0 } from '../../../context/auth0'
 
 const SimpleScheduleLineItem = ({
   lineItem: { name, startTime, endTime, hosts, links },
 }) => {
+  const { token } = useAuth0()
   const { now } = useProfile().schedule
 
   const [openLearningLinks, adobeConnectLinks] = sortLinksIntoGroups(links, [
@@ -80,6 +82,10 @@ const SimpleScheduleLineItem = ({
             {openLearningLinks.length > 0 &&
               (openLearningLinks.length === 1 ? (
                 <a
+                  onClick={makeOpenLearningSSOHandler(
+                    openLearningLinks[0].url,
+                    token,
+                  )}
                   href={openLearningLinks[0].url}
                   className="btn btn-secondary ml-2 float-right"
                 >
@@ -99,13 +105,14 @@ const SimpleScheduleLineItem = ({
                   <div className="dropdown-menu">
                     {openLearningLinks
                       .sort(sortLinksByText)
-                      .map((adobeConnectLink, index) => (
+                      .map((link, index) => (
                         <a
                           key={`ac-${index}`}
                           className="dropdown-item"
-                          href={adobeConnectLink.url}
+                          href={link.url}
+                          onclick={makeOpenLearningSSOHandler(link.url, token)}
                         >
-                          {adobeConnectLink.text || 'Join!'}
+                          {link.text || 'Join!'}
                         </a>
                       ))}
                   </div>
@@ -139,4 +146,62 @@ const isActiveItem = (now, startTime, endTime) => {
 
 const sortLinksByText = (a, b) => {
   return a.text < b.text ? -1 : 1
+}
+
+function makeOpenLearningSSOHandler(link, token) {
+  return performSSOExchange
+
+  async function performSSOExchange(e) {
+    e.preventDefault()
+    e.stopPropagation()
+
+    const { ssoUrl } = await api_get(token, '/sso/open-learning')
+    const url = new URL(ssoUrl)
+    const urlParams = new URLSearchParams(url.search)
+    url.search = ''
+
+    const iframe = document.createElement('iframe')
+    iframe.style.display = 'none'
+    iframe.name = 'transFrame'
+    iframe.id = 'transFrame'
+    document.body.appendChild(iframe)
+
+    if (iframe.contentWindow.document.readyState !== 'complete')
+      await new Promise((resolve) => (iframe.onload = resolve))
+
+    const form = document.createElement('form')
+    form.method = 'POST'
+    form.action = url.toString()
+    form.target = 'transFrame'
+
+    for (const [key, value] of urlParams) {
+      const el = document.createElement('input')
+      el.type = 'hidden'
+      el.name = key
+      el.value = value
+      form.appendChild(el)
+    }
+
+    // let el
+    // el = document.createElement('input');el.type='hidden';el.name='resource_link_id';el.value='launch-5ee515553df66afed7a63f77';form.appendChild(el)
+    // el = document.createElement('input');el.type='hidden';el.name='user_id';el.value='test_student';form.appendChild(el)
+    // el = document.createElement('input');el.type='hidden';el.name='oauth_nonce';el.value='jeKAt8Ezpmlo69nWzireoYOUTHJUbzNj';form.appendChild(el)
+    // el = document.createElement('input');el.type='hidden';el.name='oauth_timestamp';el.value='1592721044';form.appendChild(el)
+    // el = document.createElement('input');el.type='hidden';el.name='oauth_consumer_key';el.value='institution:beam';form.appendChild(el)
+    // el = document.createElement('input');el.type='hidden';el.name='lti_version';el.value='LTI-1p0';form.appendChild(el)
+    // el = document.createElement('input');el.type='hidden';el.name='oauth_signature_method';el.value='HMAC-SHA1';form.appendChild(el)
+    // el = document.createElement('input');el.type='hidden';el.name='oauth_version';el.value='1.0';form.appendChild(el)
+    // el = document.createElement('input');el.type='hidden';el.name='oauth_signature';el.value='w0hgT3N/Tt21LTgQkeZKlIINga4=';form.appendChild(el)
+    // el = document.createElement('input');el.type='hidden';el.name='lti_message_type';el.value='basic-lti-launch-request';form.appendChild(el)
+
+    document.body.appendChild(form)
+    form.submit()
+
+    await new Promise((resolve) => (iframe.onload = resolve))
+
+    window.open(
+      'https://www.openlearning.com/beam/courses/test-course-for-testing2/',
+      '_blank',
+    )
+  }
 }
