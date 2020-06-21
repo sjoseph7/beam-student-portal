@@ -109,25 +109,25 @@ async function loadAllData(setData, setLoading, user, token) {
       : moment()
 
     const currentDay = now.format('dddd').toLowerCase()
-    const regionalEvents = await get(
-      `/schedule-items?region[in]=${regions}&days[in]=${currentDay}`,
-    )
-    const hostedEvents = await get(
-      `/schedule-items?hosts[in]=${_id}&days[in]=${currentDay}`,
-    )
+    // const regionalEvents = await get(
+    //   `/schedule-items?region[in]=${regions}&days[in]=${currentDay}`,
+    // )
+    // const hostedEvents = await get(
+    //   `/schedule-items?hosts[in]=${_id}&days[in]=${currentDay}`,
+    // )
     const participantEvents = await get(
       `/schedule-items?participants[in]=${_id}&days[in]=${currentDay}`,
     )
 
-    const filteredRegionalEvents = regionalEvents
-      .filter(({ participants }) => participants.length === 0)
-      .filter(
-        ({ hosts }) => hosts.filter((host) => host._id === _id).length === 0,
-      )
+    // const filteredRegionalEvents = regionalEvents
+    //   .filter(({ participants }) => participants.length === 0)
+    //   .filter(
+    //     ({ hosts }) => hosts.filter((host) => host._id === _id).length === 0,
+    //   )
 
     const lineItems = [
-      ...filteredRegionalEvents,
-      ...hostedEvents,
+      // ...filteredRegionalEvents,
+      // ...hostedEvents,
       ...participantEvents,
     ]
 
