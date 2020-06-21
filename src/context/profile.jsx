@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, createContext } from "react";
+import moment from "moment";
 import { getGlobalConfig } from "../utils/config";
 import { useAuth0 } from "./auth0/provider";
-
 
 const ProfileContext = createContext();
 export const useProfile = () => useContext(ProfileContext)
@@ -38,15 +38,18 @@ export const ProfileProvider = ({ children }) => {
 
 async function loadAllData(setData, setLoading, user, token) {
   const data = {}
-  const extendData = (x) => Object.assign(data, x)
 
-  const promises = []
+  data.profile = loadUserProfile()
+  data.region = loadRegionData()
+  data.announcements = loadAnnouncements()
+  data.schedule = loadSchedule()
 
-  promises.push(loadUserProfile(extendData, user))
-
-  await Promise.all(promises)
+  await Promise.all(
+    Object.entries(data).map(async ([k, p]) => data[k] = await p)
+  )
 
   console.log(data)
+
   setData(data)
   setLoading(false)
 
@@ -65,19 +68,66 @@ async function loadAllData(setData, setLoading, user, token) {
     const response = await fetch(endpoint, { headers });
 
     if (response.ok) {
-      return await response.json()
+      return (await response.json()).data
     } else {
       console.error(await response.text())
     }
   }
 
-  async function loadUserProfile (setData, user) {
+  async function loadUserProfile () {
     const { userId } = user;
-    const response = await get(`/people/${userId}`);
-
-    const profile = response.data
-    setData({ profile });
-
-    return profile
+    return await get(`/people/${userId}`);
   };
+
+  async function loadRegionData () {
+    const { regions } = await data.profile
+    return await get(`/regions/${regions[0]}`);
+  };
+
+  async function loadAnnouncements() {
+    const { regions, _id } = await data.profile
+    const regionAnnouncements = await get(`/announcements?regions[in]=${regions}`);
+    const targetAnnouncements = await get(`/announcements?recipients[in]=${_id}`);
+
+    const announcements = [
+      ...regionAnnouncements.filter(x => !x.recipients.length),
+      ...targetAnnouncements,
+    ].map(({ message }) => message);
+
+    return announcements;  
+  }
+
+  async function loadSchedule () {
+    const { regions, _id } = await data.profile
+    const currentDay = (
+      getGlobalConfig().useDemoDateTimeForSchedule
+      ? "monday"
+      : moment().format("dddd").toLowerCase()
+    )
+
+    const regionalEvents = await get(
+      `/schedule-items?region[in]=${regions}&days[in]=${currentDay}`
+    );
+    const hostedEvents = await get(
+      `/schedule-items?hosts[in]=${_id}&days[in]=${currentDay}`
+    );
+    const participantEvents = await get(
+      `/schedule-items?participants[in]=${_id}&days[in]=${currentDay}`
+    );
+
+    const filteredRegionalEvents = regionalEvents
+      .filter(({ participants }) => participants.length === 0)
+      .filter(
+        ({ hosts }) => hosts.filter(host => host._id === _id).length === 0
+      );
+
+    const lineItems = [
+      ...filteredRegionalEvents,
+      ...hostedEvents,
+      ...participantEvents
+    ];
+
+    return { lineItems }
+};
+  
 }

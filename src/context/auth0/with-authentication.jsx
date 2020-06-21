@@ -13,10 +13,17 @@ export const withAuthentication = Component => {
     )
 }
 
-const withLoadingInterstial = Component => props => (
-    (useAuth0().loading && useProfile().loading) ? <Loading /> : <Component {...props} />
-) 
+const withLoadingInterstial = Component => props => {
+    // maintain consistent ordering of hook calls
+    const auth0 = useAuth0()
+    const profile = useProfile()
     
+    const loading = auth0.loading || profile.loading
+    return (
+        loading ? <Loading /> : <Component {...props} />
+    )
+}
+
 const Loading = () => (
     <>
         <span>Loading...</span>

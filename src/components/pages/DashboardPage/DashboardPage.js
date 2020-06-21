@@ -1,44 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import AnnouncementListContainer from "../../layout/AnnouncemnentListContainer/AnnouncementListContainer";
 import ScheduleContainer from "../../layout/ScheduleContainer/ScheduleContainer";
 import Navbar from "../../layout/Navbar/Navbar";
-import axios from "axios";
-import { getGlobalConfig } from "../../../utils/config";
-import { useAuth0 } from "../../../context/auth0/provider";
 import { useProfile } from "../../../context/profile";
 
 
-const DashboardPage = props => {
-  const { user, token } = useAuth0();
-  const { profile } = useProfile();
-  const [region, setRegion] = useState({});
-  const [loadingRegion, setLoadingRegion] = useState(true);
-
-  useEffect(() => {
-    const getRegionData = async () => {
-      try {
-        const opts = { headers: { Authorization: `Bearer ${token}` } };
-        const { apiBaseUrl } = getGlobalConfig()
-        const regionData = await axios.get(
-          `${apiBaseUrl}/regions/${
-            profile?.regions[0] || ""
-          }`,
-          opts
-        );
-        setRegion(regionData.data?.data || {});
-        setLoadingRegion(false);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    if (profile && loadingRegion) {
-      console.log("loading region[0]");
-      getRegionData();
-    }
-
-    //eslint-disable-next-line
-  }, [user, profile]);
+const DashboardPage = () => {
+  const { region } = useProfile();
 
   return (
     <>
