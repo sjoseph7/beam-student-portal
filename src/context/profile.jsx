@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, createContext } from "react";
 import moment from "moment";
 import { getGlobalConfig } from "../utils/config";
-import { useAuth0 } from "./auth0/provider";
+import { useAuth0 } from "./auth0";
 
 const ProfileContext = createContext();
 export const useProfile = () => useContext(ProfileContext)
@@ -128,6 +128,5 @@ async function loadAllData(setData, setLoading, user, token) {
     ];
 
     return { lineItems }
-};
-  
+  };
 }

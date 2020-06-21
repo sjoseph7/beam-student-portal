@@ -1,33 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import DashboardPage from "./components/pages/DashboardPage/DashboardPage";
 import "./App.module.css";
-import { messages } from "./loadingMessages.json";
-import { withAuthentication } from './context/auth0/with-authentication'
-import { useAuth0 } from "./context/auth0/provider";
+import { withContext } from './context/with-context'
 
 
-const App = () => {
-  const { loading } = useAuth0();
-  const [randomLoadingMessage, setRandomLoadingMessage] = useState("");
+const App = () => (
+  <Router>
+    <Switch>
+      <Route exact path="/" component={DashboardPage} />
+    </Switch>
+  </Router>
+);
 
-  useEffect(() => {
-    setRandomLoadingMessage(
-      messages[Math.floor(Math.random() * messages.length)]
-    );
-  }, []);
-
-  if (loading) {
-    return <div>{randomLoadingMessage}</div>;
-  }
-
-  return (
-    <Router>
-      <Switch>
-        <Route exact path="/" component={DashboardPage} />
-      </Switch>
-    </Router>
-  );
-};
-
-export default withAuthentication(App);
+export default withContext(App);

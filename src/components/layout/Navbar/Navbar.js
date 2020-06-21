@@ -1,5 +1,5 @@
 import React from "react";
-import { useAuth0 } from '../../../context/auth0/provider'
+import { useAuth0 } from '../../../context/auth0'
 import { useProfile } from "../../../context/profile";
 
 const Navbar = () => {
