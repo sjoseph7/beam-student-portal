@@ -5,6 +5,7 @@
   "dependencies": {
     "@auth0/auth0-spa-js": "^1.10.0",
     "moment": "^2.26.0",
+    "prettier": "^2.0.5",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-loading-skeleton": "^2.1.1",
@@ -18,6 +19,11 @@
   },
   "eslintConfig": {
     "extends": "react-app"
+  },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true,
+    "trailingComma": "all"
   },
   "browserslist": {
     "production": [
