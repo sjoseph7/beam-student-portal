@@ -1,4 +1,5 @@
 import React from 'react'
+import crypto from 'crypto'
 import moment from 'moment'
 import { useProfile, api_get } from '../../../context/profile'
 import { useAuth0 } from '../../../context/auth0'
@@ -47,6 +48,7 @@ const SimpleScheduleLineItem = ({
                 <a
                   href={fixedAdobeConnectLinks[0].url}
                   target="_blank"
+                  rel="noopener noreferrer"
                   className="btn btn-primary ml-2 float-right"
                 >
                   {fixedAdobeConnectLinks[0].text || 'Join Room'}
@@ -71,6 +73,7 @@ const SimpleScheduleLineItem = ({
                           className="dropdown-item"
                           href={adobeConnectLink.url}
                           target="_blank"
+                          rel="noopener noreferrer"
                         >
                           {adobeConnectLink.text || 'Join!'}
                         </a>
@@ -90,6 +93,7 @@ const SimpleScheduleLineItem = ({
                   )}
                   href={openLearningLinks[0].url}
                   target="_blank"
+                  rel="noopener noreferrer"
                   className="btn btn-secondary ml-2 float-right"
                 >
                   {openLearningLinks[0].text || 'Join Room'}
@@ -114,6 +118,7 @@ const SimpleScheduleLineItem = ({
                           className="dropdown-item"
                           href={link.url}
                           target="_blank"
+                          rel="noopener noreferrer"
                           onclick={makeOpenLearningSSOHandler(link.url, token)}
                         >
                           {link.text || 'Join!'}
@@ -164,10 +169,16 @@ function makeOpenLearningSSOHandler(link, token) {
     const urlParams = new URLSearchParams(url.search)
     url.search = ''
 
+    const buf = crypto.randomBytes(256)
+    const nonce = buf
+      .toString('base64')
+      .replace(/[^a-zA-Z0-9]/g, '')
+      .slice(-8)
+
     const iframe = document.createElement('iframe')
     iframe.style.display = 'none'
-    iframe.name = 'transFrame'
-    iframe.id = 'transFrame'
+    iframe.name = nonce
+    iframe.id = nonce
     document.body.appendChild(iframe)
 
     if (iframe.contentWindow.document.readyState !== 'complete')
@@ -176,7 +187,7 @@ function makeOpenLearningSSOHandler(link, token) {
     const form = document.createElement('form')
     form.method = 'POST'
     form.action = url.toString()
-    form.target = 'transFrame'
+    form.target = nonce
 
     for (const [key, value] of urlParams) {
       const el = document.createElement('input')
@@ -191,6 +202,6 @@ function makeOpenLearningSSOHandler(link, token) {
 
     await new Promise((resolve) => (iframe.onload = resolve))
 
-    window.open(link, '_blank')
+    window.open(link, '_blank', 'noopener,noreferrer')
   }
 }
