@@ -72,7 +72,7 @@ async function loadAllData(setData, setLoading, user, token) {
   async function loadAnnouncements() {
     const { regions, _id } = await data.profile
     const regionAnnouncements = await get(
-      `/announcements?regions[in]=${regions}`,
+      `/announcements?regions[in]=${regions[0]}`,
     )
     const targetAnnouncements = await get(
       `/announcements?recipients[in]=${_id}`,
