@@ -64,7 +64,10 @@ export const Auth0Provider = ({ children }) => {
         setAuthState({
           user,
           token,
-          logout: auth0Client.logout,
+          logout: () =>
+            auth0Client.logout({
+              returnTo: window.location.origin,
+            }),
         })
         setLoading(false)
       } else {
