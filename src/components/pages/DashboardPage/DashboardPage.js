@@ -3,8 +3,11 @@ import AnnouncementListContainer from '../../layout/AnnouncemnentListContainer/A
 import ScheduleContainer from '../../layout/ScheduleContainer/ScheduleContainer'
 import Navbar from '../../layout/Navbar/Navbar'
 import { useProfile } from '../../../context/profile'
+import { makeOpenLearningSSOHandler } from '../../../utils/openlearning'
+import { useAuth0 } from '../../../context/auth0'
 
 const DashboardPage = () => {
+  const { token } = useAuth0()
   const { region } = useProfile()
 
   return (
@@ -37,9 +40,20 @@ const DashboardPage = () => {
             <ul className="list-unstyled">
               {(region.siteContent?.links || [])
                 .filter((link) => link.type === 'helpful')
-                .map((link, index) => (
+                .map(({ url, text }, index) => (
                   <li key={`helpful-${index}`}>
-                    <a href={link.url}>{link.text}</a>
+                    {url.includes('openlearning.com') ? (
+                      <a
+                        onClick={makeOpenLearningSSOHandler(url, token)}
+                        href={url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {text}
+                      </a>
+                    ) : (
+                      <a href={url}>{text}</a>
+                    )}
                   </li>
                 ))}
             </ul>
