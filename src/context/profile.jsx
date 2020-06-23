@@ -13,15 +13,26 @@ export const ProfileProvider = ({ children }) => {
 
   useEffect(() => {
     if (auth0loading) return
-    loadAllData(
-      // react hooks must be called from within a component function
-      (x) => setData(x),
-      (x) => setLoading(x),
-      user,
-      token,
-    )
-      .then(console.log)
-      .catch(console.error)
+
+    const reloadData = () => {
+      console.log('reloading data from server...')
+      loadAllData(
+        // react hooks must be called from within a component function
+        (x) => setData(x),
+        (x) => setLoading(x),
+        user,
+        token,
+      )
+        .then(console.log)
+        .catch(console.error)
+    }
+
+    reloadData()
+    const handle = setInterval(reloadData, 1000 * 60 * 2) // reload data every 2 minutes
+
+    return () => {
+      clearInterval(handle)
+    }
   }, [auth0loading, token, user])
 
   // Clear Errors
