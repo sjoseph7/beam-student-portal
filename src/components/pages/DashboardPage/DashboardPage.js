@@ -14,13 +14,13 @@ const DashboardPage = () => {
       <div className="text-center">
         <div className="container mb-5">
           {/* // <!-- TODO Componentize --> */}
-          <h6 className="mt-5">
+          <h3 className="mt-5">
             {region.siteContent?.title ||
               "I'm unsure of where you are at the moment..."}
-          </h6>
-          <h6>
+          </h3>
+          <h4>
             {region.siteContent?.subTitle || 'Please contact an administrator'}
-          </h6>
+          </h4>
 
           <div className="my-5">
             <AnnouncementListContainer />

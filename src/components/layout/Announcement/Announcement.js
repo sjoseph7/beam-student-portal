@@ -1,11 +1,12 @@
 import React from 'react'
 
 const Announcement = ({ message }) => {
-  return (
-    <h1>
-      <strong>"{message}"</strong>
-    </h1>
-  )
+  return message.split('\n').map((line, i) => (
+    <span key={i}>
+      <strong>{line}</strong>
+      <br />
+    </span>
+  ))
 }
 
 export default Announcement

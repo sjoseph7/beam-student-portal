@@ -1,5 +1,5 @@
 const config = {
-  useDemoDateTimeForSchedule: true,
+  useDemoDateTimeForSchedule: false,
   apiBaseUrl: 'https://beam-portal-api.herokuapp.com/api/v3',
 }
 

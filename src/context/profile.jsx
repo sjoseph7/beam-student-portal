@@ -90,15 +90,15 @@ async function loadAllData(setData, setLoading, user, token) {
     const { regions, _id } = await data.profile
     const now = getGlobalConfig().useDemoDateTimeForSchedule
       ? '2020-06-22 09:40'
-      : ''
+      : undefined
 
     const currentDay = moment(now).format('dddd').toLowerCase()
     // const regionalEvents = await get(
     //   `/schedule-items?region[in]=${regions}&days[in]=${currentDay}`,
     // )
-    // const hostedEvents = await get(
-    //   `/schedule-items?hosts[in]=${_id}&days[in]=${currentDay}`,
-    // )
+    const hostedEvents = await get(
+      `/schedule-items?hosts[in]=${_id}&days[in]=${currentDay}`,
+    )
     const participantEvents = await get(
       `/schedule-items?participants[in]=${_id}&days[in]=${currentDay}`,
     )
@@ -111,7 +111,7 @@ async function loadAllData(setData, setLoading, user, token) {
 
     const lineItems = [
       // ...filteredRegionalEvents,
-      // ...hostedEvents,
+      ...hostedEvents,
       ...participantEvents,
     ]
 

@@ -96,7 +96,7 @@ const SimpleScheduleLineItem = ({
                   rel="noopener noreferrer"
                   className="btn btn-secondary ml-2 float-right"
                 >
-                  {openLearningLinks[0].text || 'Join Room'}
+                  {openLearningLinks[0].text || 'Course Materials'}
                 </a>
               ) : (
                 <div className="btn-group ml-2 float-right">
