@@ -28,7 +28,7 @@ export const ProfileProvider = ({ children }) => {
     }
 
     reloadData()
-    const handle = setInterval(reloadData, 1000 * 60 * 2) // reload data every 2 minutes
+    const handle = setInterval(reloadData, 1000 * 60 * 5) // reload data every 5 minutes
 
     return () => {
       clearInterval(handle)

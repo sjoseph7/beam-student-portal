@@ -5,10 +5,12 @@ import { useAuth0 } from '../../../context/auth0'
 import { makeOpenLearningSSOHandler } from '../../../utils/openlearning'
 
 const SimpleScheduleLineItem = ({
-  lineItem: { name, startTime, endTime, hosts, links },
+  lineItem: { name, startTime, endTime, hosts, altHost, links },
 }) => {
   const { token } = useAuth0()
   const { now } = useProfile().schedule
+
+  const host = altHost || hosts.map((host) => host.firstName).join(', ')
 
   const [openLearningLinks, adobeConnectLinks] = sortLinksIntoGroups(links, [
     'open-learning',
@@ -130,7 +132,7 @@ const SimpleScheduleLineItem = ({
             {/* /Componentize this */}
             <h5 className="card-title">{name || 'No Name'}</h5>
             <h6 className="card-subtitle mb-2 text-muted">
-              <em>With {hosts.map((host) => host.firstName).join(', ')}</em>
+              <em>With {host}</em>
             </h6>
           </div>
         </div>

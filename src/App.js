@@ -12,4 +12,9 @@ const App = () => (
   </Router>
 )
 
+setTimeout(() => {
+  console.log('reloading page...')
+  window.location.reload()
+}, 1000 * 60 * 60 * 2) // reload page every 2 hours
+
 export default withContext(App)
