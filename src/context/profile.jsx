@@ -99,9 +99,7 @@ async function loadAllData(setData, setLoading, user, token) {
 
   async function loadSchedule() {
     const { regions, _id } = await data.profile
-    const now = getGlobalConfig().useDemoDateTimeForSchedule
-      ? '2020-06-22 09:40'
-      : undefined
+    const now = getGlobalConfig().now
 
     const currentDay = moment(now).format('dddd').toLowerCase()
     // const regionalEvents = await get(
