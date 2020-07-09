@@ -31,7 +31,16 @@ export const Auth0Provider = ({ children }) => {
         isAuthenticated = await auth0Client.isAuthenticated()
       }
 
-      window.history.replaceState({}, document.title, window.location.pathname)
+      const search = new URLSearchParams(window.location.search)
+      search.delete('code')
+      search.delete('state')
+      const search_str = search.toString()
+      const query = search_str ? `?${search_str}` : ''
+      window.history.replaceState(
+        {},
+        document.title,
+        window.location.pathname + query,
+      )
 
       if (isAuthenticated) {
         const auth0user = await auth0Client.getUser()
@@ -71,7 +80,9 @@ export const Auth0Provider = ({ children }) => {
         })
         setLoading(false)
       } else {
-        auth0Client.loginWithRedirect()
+        auth0Client.loginWithRedirect({
+          redirect_uri: AUTH0_CONFIG.redirect_uri + query,
+        })
       }
     }
   }, [])
